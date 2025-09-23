@@ -5,68 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>식품 원재료 가이드 · 단일 HTML</title>
   <meta name="color-scheme" content="light dark" />
-  <style>
-    :root{
-      --bg:#f6f7f3; --card:#ffffff; --text:#263238; --muted:#778187; --ring:#9fb090; --brand:#a8b89e; --brand-d:#8ea086;
-      --chip:#f3f4ed; --chipText:#55635a; --border:#e6e9e4; --shadow:0 8px 28px rgba(16,24,40,.08);
-    }
-    @media (prefers-color-scheme: dark){
-      :root{ --bg:#0e1111; --card:#121517; --text:#e7ecef; --muted:#a0abb1; --ring:#7ea28e; --brand:#5e7565; --brand-d:#516658; --chip:#1a1f20; --chipText:#d9e3da; --border:#272d2f; --shadow:0 8px 28px rgba(0,0,0,.45); }
-    }
-    *{ box-sizing: border-box }
-    body{ margin:0; background:var(--bg); color:var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif }
-    .wrap{ max-width: 1040px; margin: 0 auto; padding-bottom: 48px }
-
-    /* Hero */
-    .hero{ background: linear-gradient(180deg, #a7b995 0%, #9fb090 100%); color:#fff; padding: 40px 20px 28px; border-bottom: 1px solid rgba(255,255,255,.2) }
-    .hero h1{ margin:0 0 6px; font-size: clamp(22px,3vw,32px); font-weight: 800; letter-spacing: -.3px; text-align:center }
-    .hero p{ margin:0; opacity:.9; text-align:center }
-
-    /* Search */
-    .search-wrap{ max-width: 940px; margin: 16px auto 0; display:flex; gap:12px }
-    .search{ position:relative; flex:1 }
-    .search input{ width:100%; height:52px; padding:0 56px 0 48px; border-radius: 16px; border:1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.85); color:#2f3b32; box-shadow: var(--shadow) }
-    .search input::placeholder{ color:#8ea086 }
-    .search .icon{ position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:20px; opacity:.8 }
-    .search .btn{ height:52px; min-width: 88px; border:none; border-radius:16px; background: rgba(0,0,0,.12); color:#fff; font-weight:700; cursor:pointer }
-
-    /* Controls */
-    .panel{ background:var(--card); border:1px solid var(--border); box-shadow: var(--shadow); border-radius: 18px; padding: 16px; margin: 16px 20px 0 }
-    .grid{ display: grid; gap: 12px; grid-template-columns: repeat(12, 1fr) }
-    .field{ display:grid; gap:6px }
-    label{ font-size: 12px; color: var(--muted) }
-    select, input[type="text"]{ width:100%; height:44px; border:1px solid var(--border); background:var(--card); color:var(--text); border-radius:12px; padding:0 12px; outline:none }
-
-    /* Category scroller */
-    .cats{ display:flex; align-items:center; gap:10px; overflow:auto; padding: 6px 2px }
-    .chip{ flex: 0 0 auto; display:inline-flex; align-items:center; gap:8px; background: var(--chip); color: var(--chipText); border:1px solid var(--border); border-radius: 999px; padding:8px 12px; font-size: 13px; cursor:pointer }
-    .chip.active{ background: #e8efe7; border-color: var(--ring) }
-    .chip .emoji{ font-size: 16px }
-
-    /* Row under categories */
-    .subrow{ display:flex; justify-content: space-between; align-items:center; gap:12px; margin-top: 8px }
-    .muted{ color: var(--muted); font-size: 14px }
-    .sort{ min-width: 140px }
-
-    /* List & Empty */
-    .empty{ text-align:center; padding: 64px 8px; color: var(--muted) }
-    .empty .emoji{ font-size: 56px; margin-bottom: 10px; display:block }
-  </style>
+  <!-- 외부 CSS -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="wrap">
-    <div class="hero">
-      <h1>식품 원재료 가이드</h1>
-      <p>안전하고 건강한 식품 선택을 도와드립니다</p>
-      <div class="search-wrap" role="search">
-        <div class="search">
-          <span class="icon" aria-hidden>🔎</span>
-          <input id="q" placeholder="식품을 검색하세요" aria-label="검색어" />
-        </div>
-        <button id="searchBtn" class="btn">검색</button>
+  <!-- 풀-블리드 헤더: .wrap 바깥에 둔다 -->
+  <header class="hero">
+    <h1>식품 원재료 가이드</h1>
+    <p>안전하고 건강한 식품 선택을 도와드립니다</p>
+    <div class="search-wrap" role="search">
+      <div class="search">
+        <span class="icon" aria-hidden>🔎</span>
+        <input id="q" placeholder="식품을 검색하세요" aria-label="검색어" />
       </div>
+      <button id="searchBtn" class="btn">검색</button>
     </div>
+  </header>
 
+  <!-- 본문 컨테이너 -->
+  <main class="wrap">
     <section class="panel" aria-labelledby="filters">
       <h2 id="filters" class="sr-only" style="position:absolute;left:-9999px">필터</h2>
       <div class="grid">
@@ -116,9 +73,7 @@
 
       <div style="margin-top:14px">
         <div class="muted" style="margin-bottom:6px">식품 카테고리</div>
-        <div id="cats" class="cats" aria-label="카테고리">
-          <!-- chips injected -->
-        </div>
+        <div id="cats" class="cats" aria-label="카테고리"><!-- chips injected --></div>
         <div class="subrow">
           <div id="count" class="muted">총 0개 상품</div>
           <select id="sort" class="sort">
@@ -140,7 +95,7 @@
       </div>
       <div id="list" class="grid" style="grid-template-columns: repeat(12,1fr); gap:12px"></div>
     </section>
-  </div>
+  </main>
 
   <script>
     // --- 카테고리 칩 구성 (이모지 포함) ---
@@ -155,14 +110,14 @@
     ];
 
     const DATA = [
-      { id:1, name:'시리얼 오리지널', brand:'그린푸드', cat:'snack', price:3900, rating:4.2, review:112, ings:['옥수수','설탕','소금'] },
-      { id:2, name:'현미 그래놀라',   brand:'헬씨팜',   cat:'snack', price:6200, rating:4.7, review:86,   ings:['현미','귀리','아몬드','꿀'] },
-      { id:3, name:'탄산수 라임',     brand:'스파클',   cat:'drink', price:1200, rating:4.0, review:44,   ings:['정제수','탄산','천연향'] },
-      { id:4, name:'요거트 플레인',   brand:'밀키벨',   cat:'dairy', price:1800, rating:4.5, review:210,  ings:['우유','유산균','설탕'] },
-      { id:5, name:'콩두유 라이트',   brand:'소이팜',   cat:'drink', price:1500, rating:4.1, review:98,   ings:['대두','정제수','감미료'] },
-      { id:6, name:'가쓰오 우동 사리',brand:'우마미',   cat:'noodle',price:3100, rating:4.3, review:60,   ings:['밀가루','정제소금','가쓰오추출물'] },
-      { id:7, name:'초코 쿠키',       brand:'스위티',   cat:'snack', price:2500, rating:3.9, review:31,   ings:['밀가루','버터','코코아','우유'] },
-      { id:8, name:'바질 페스토 파스타', brand:'델리',  cat:'noodle',price:7800, rating:4.8, review:12,   ings:['듀럼세몰리나','바질','치즈','올리브오일'] }
+      { id:1, name:'시리얼 오리지널', brand:'그린푸드', cat:'snack',  price:3900, rating:4.2, review:112, ings:['옥수수','설탕','소금'] },
+      { id:2, name:'현미 그래놀라',   brand:'헬씨팜',   cat:'snack',  price:6200, rating:4.7, review:86,   ings:['현미','귀리','아몬드','꿀'] },
+      { id:3, name:'탄산수 라임',     brand:'스파클',   cat:'drink',  price:1200, rating:4.0, review:44,   ings:['정제수','탄산','천연향'] },
+      { id:4, name:'요거트 플레인',   brand:'밀키벨',   cat:'dairy',  price:1800, rating:4.5, review:210,  ings:['우유','유산균','설탕'] },
+      { id:5, name:'콩두유 라이트',   brand:'소이팜',   cat:'drink',  price:1500, rating:4.1, review:98,   ings:['대두','정제수','감미료'] },
+      { id:6, name:'가쓰오 우동 사리',brand:'우마미',   cat:'noodle', price:3100, rating:4.3, review:60,   ings:['밀가루','정제소금','가쓰오추출물'] },
+      { id:7, name:'초코 쿠키',       brand:'스위티',   cat:'snack',  price:2500, rating:3.9, review:31,   ings:['밀가루','버터','코코아','우유'] },
+      { id:8, name:'바질 페스토 파스타', brand:'델리',  cat:'noodle', price:7800, rating:4.8, review:12,   ings:['듀럼세몰리나','바질','치즈','올리브오일'] }
     ];
 
     const $q = document.getElementById('q');
@@ -198,12 +153,11 @@
       if (currentCat!=='all') res = res.filter(f=> f.cat===currentCat);
 
       switch($sort.value){
-        case 'price_low': res.sort((a,b)=>(a.price||0)-(b.price||0)); break;
+        case 'price_low':  res.sort((a,b)=>(a.price||0)-(b.price||0)); break;
         case 'price_high': res.sort((a,b)=>(b.price||0)-(a.price||0)); break;
-        case 'review': res.sort((a,b)=>(b.review||0)-(a.review||0)); break;
-        case 'name': res.sort((a,b)=> (a.name||'').localeCompare(b.name||'')); break;
-        default: // rating
-          res.sort((a,b)=>(b.rating||0)-(a.rating||0));
+        case 'review':     res.sort((a,b)=>(b.review||0)-(a.review||0)); break;
+        case 'name':       res.sort((a,b)=> (a.name||'').localeCompare(b.name||'')); break;
+        default:           res.sort((a,b)=>(b.rating||0)-(a.rating||0)); // rating
       }
       results = res; render();
     }

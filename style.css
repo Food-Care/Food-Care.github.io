@@ -1,0 +1,45 @@
+:root{
+  --bg:#f6f7f3; --card:#ffffff; --text:#263238; --muted:#778187; --ring:#9fb090; --brand:#a8b89e; --brand-d:#8ea086;
+  --chip:#f3f4ed; --chipText:#55635a; --border:#e6e9e4; --shadow:0 8px 28px rgba(16,24,40,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0e1111; --card:#121517; --text:#e7ecef; --muted:#a0abb1; --ring:#7ea28e; --brand:#5e7565; --brand-d:#516658; --chip:#1a1f20; --chipText:#d9e3da; --border:#272d2f; --shadow:0 8px 28px rgba(0,0,0,.45); }
+}
+*{ box-sizing: border-box }
+body{ margin:0; background:var(--bg); color:var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif }
+.wrap{ max-width: 1040px; margin: 0 auto; padding-bottom: 48px }
+
+/* Hero */
+.hero{ background: linear-gradient(180deg, #a7b995 0%, #9fb090 100%); color:#fff; padding: 40px 20px 28px; border-bottom: 1px solid rgba(255,255,255,.2) }
+.hero h1{ margin:0 0 6px; font-size: clamp(22px,3vw,32px); font-weight: 800; letter-spacing: -.3px; text-align:center }
+.hero p{ margin:0; opacity:.9; text-align:center }
+
+/* Search */
+.search-wrap{ max-width: 940px; margin: 16px auto 0; display:flex; gap:12px }
+.search{ position:relative; flex:1 }
+.search input{ width:100%; height:52px; padding:0 56px 0 48px; border-radius: 16px; border:1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.85); color:#2f3b32; box-shadow: var(--shadow) }
+.search input::placeholder{ color:#8ea086 }
+.search .icon{ position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:20px; opacity:.8 }
+.search .btn{ height:52px; min-width: 88px; border:none; border-radius:16px; background: rgba(0,0,0,.12); color:#fff; font-weight:700; cursor:pointer }
+
+/* Controls */
+.panel{ background:var(--card); border:1px solid var(--border); box-shadow: var(--shadow); border-radius: 18px; padding: 16px; margin: 16px 20px 0 }
+.grid{ display: grid; gap: 12px; grid-template-columns: repeat(12, 1fr) }
+.field{ display:grid; gap:6px }
+label{ font-size: 12px; color: var(--muted) }
+select, input[type="text"]{ width:100%; height:44px; border:1px solid var(--border); background:var(--card); color:var(--text); border-radius:12px; padding:0 12px; outline:none }
+
+/* Category scroller */
+.cats{ display:flex; align-items:center; gap:10px; overflow:auto; padding: 6px 2px }
+.chip{ flex: 0 0 auto; display:inline-flex; align-items:center; gap:8px; background: var(--chip); color: var(--chipText); border:1px solid var(--border); border-radius: 999px; padding:8px 12px; font-size: 13px; cursor:pointer }
+.chip.active{ background: #e8efe7; border-color: var(--ring) }
+.chip .emoji{ font-size: 16px }
+
+/* Row under categories */
+.subrow{ display:flex; justify-content: space-between; align-items:center; gap:12px; margin-top: 8px }
+.muted{ color: var(--muted); font-size: 14px }
+.sort{ min-width: 140px }
+
+/* List & Empty */
+.empty{ text-align:center; padding: 64px 8px; color: var(--muted) }
+.empty .emoji{ font-size: 56px; margin-bottom: 10px; display:block }
