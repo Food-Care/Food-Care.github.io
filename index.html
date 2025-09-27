@@ -3,85 +3,36 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>식품 원재료 가이드 · 단일 HTML</title>
-  <meta name="color-scheme" content="light dark" />
-  <!-- 외부 CSS -->
+  <title>식품 원재료 가이드</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- 풀-블리드 헤더: .wrap 바깥에 둔다 -->
+  <!-- Hero -->
   <header class="hero">
     <h1>식품 원재료 가이드</h1>
     <p>안전하고 건강한 식품 선택을 도와드립니다</p>
     <div class="search-wrap" role="search">
       <div class="search">
-        <span class="icon" aria-hidden>🔎</span>
-        <input id="q" placeholder="식품을 검색하세요" aria-label="검색어" />
+        <span class="icon" aria-hidden="true">🔎</span>
+        <input id="q" placeholder="식품을 검색하세요 (제품명/회사명/원재료)" aria-label="검색어" />
       </div>
-      <button id="searchBtn" class="btn">검색</button>
+      <button id="searchBtn" class="btn" type="button">검색</button>
     </div>
   </header>
 
-  <!-- 본문 컨테이너 -->
+  <!-- Main -->
   <main class="wrap">
     <section class="panel" aria-labelledby="filters">
       <h2 id="filters" class="sr-only" style="position:absolute;left:-9999px">필터</h2>
-      <div class="grid">
-        <div class="field" style="grid-column: span 4">
-          <label>육류</label>
-          <select id="f-meat">
-            <option value="">전체</option>
-            <option>돼지고기</option><option>쇠고기</option><option>닭고기</option>
-          </select>
-        </div>
-        <div class="field" style="grid-column: span 4">
-          <label>채소류</label>
-          <select id="f-vegi">
-            <option value="">전체</option>
-            <option>대파</option><option>양파</option><option>마늘</option>
-          </select>
-        </div>
-        <div class="field" style="grid-column: span 4">
-          <label>식품첨가물</label>
-          <select id="f-add">
-            <option value="">전체</option>
-            <option>아스파탐</option><option>MSG</option><option>보존료</option>
-          </select>
-        </div>
-        <div class="field" style="grid-column: span 4">
-          <label>대체당</label>
-          <select id="f-sweet">
-            <option value="">전체</option>
-            <option>에리스리톨</option><option>말티톨</option><option>스테비아</option>
-          </select>
-        </div>
-        <div class="field" style="grid-column: span 4">
-          <label>알레르기</label>
-          <select id="f-allergy">
-            <option value="">전체</option>
-            <option>우유</option><option>대두</option><option>밀</option><option>계란</option>
-          </select>
-        </div>
-        <div class="field" style="grid-column: span 4">
-          <label>기타</label>
-          <select id="f-etc">
-            <option value="">전체</option>
-            <option>카페인</option><option>향료</option>
-          </select>
-        </div>
-      </div>
 
       <div style="margin-top:14px">
         <div class="muted" style="margin-bottom:6px">식품 카테고리</div>
-        <div id="cats" class="cats" aria-label="카테고리"><!-- chips injected --></div>
+        <div id="cats" class="cats" aria-label="카테고리"></div>
         <div class="subrow">
           <div id="count" class="muted">총 0개 상품</div>
-          <select id="sort" class="sort">
-            <option value="rating">추천순</option>
-            <option value="review">리뷰 많은순</option>
-            <option value="price_low">가격 낮은순</option>
-            <option value="price_high">가격 높은순</option>
+          <select id="sort" class="sort" aria-label="정렬">
             <option value="name">이름순</option>
+            <option value="brand">회사명순</option>
           </select>
         </div>
       </div>
@@ -89,120 +40,14 @@
 
     <section class="panel" style="margin: 12px 20px 0">
       <div id="empty" class="empty">
-        <span class="emoji" aria-hidden>🍽️</span>
+        <span class="emoji" aria-hidden="true">🍽️</span>
         <div style="font-weight:700">원하는 식품을 찾아보세요</div>
-        <div class="muted" style="margin-top:6px">상품명을 검색하거나 제외할 원재료를 선택해 주세요</div>
+        <div class="muted" style="margin-top:6px">상품명을 검색하거나 카테고리를 선택해 주세요</div>
       </div>
       <div id="list" class="grid" style="grid-template-columns: repeat(12,1fr); gap:12px"></div>
     </section>
   </main>
 
-  <script>
-    // --- 카테고리 칩 구성 (이모지 포함) ---
-    const CATS = [
-      {key:'all', label:'전체', emoji:'🏠'},
-      {key:'snack', label:'과자/초콜릿/시리얼', emoji:'🍪'},
-      {key:'bread', label:'빵/떡/잼', emoji:'🍞'},
-      {key:'noodle', label:'라면/면', emoji:'🍜'},
-      {key:'dairy', label:'우유/유제품', emoji:'🥛'},
-      {key:'ice', label:'아이스크림', emoji:'🍦'},
-      {key:'drink', label:'음료', emoji:'🥤'}
-    ];
-
-    const DATA = [
-      { id:1, name:'시리얼 오리지널', brand:'그린푸드', cat:'snack',  price:3900, rating:4.2, review:112, ings:['옥수수','설탕','소금'] },
-      { id:2, name:'현미 그래놀라',   brand:'헬씨팜',   cat:'snack',  price:6200, rating:4.7, review:86,   ings:['현미','귀리','아몬드','꿀'] },
-      { id:3, name:'탄산수 라임',     brand:'스파클',   cat:'drink',  price:1200, rating:4.0, review:44,   ings:['정제수','탄산','천연향'] },
-      { id:4, name:'요거트 플레인',   brand:'밀키벨',   cat:'dairy',  price:1800, rating:4.5, review:210,  ings:['우유','유산균','설탕'] },
-      { id:5, name:'콩두유 라이트',   brand:'소이팜',   cat:'drink',  price:1500, rating:4.1, review:98,   ings:['대두','정제수','감미료'] },
-      { id:6, name:'가쓰오 우동 사리',brand:'우마미',   cat:'noodle', price:3100, rating:4.3, review:60,   ings:['밀가루','정제소금','가쓰오추출물'] },
-      { id:7, name:'초코 쿠키',       brand:'스위티',   cat:'snack',  price:2500, rating:3.9, review:31,   ings:['밀가루','버터','코코아','우유'] },
-      { id:8, name:'바질 페스토 파스타', brand:'델리',  cat:'noodle', price:7800, rating:4.8, review:12,   ings:['듀럼세몰리나','바질','치즈','올리브오일'] }
-    ];
-
-    const $q = document.getElementById('q');
-    const $searchBtn = document.getElementById('searchBtn');
-    const $cats = document.getElementById('cats');
-    const $count = document.getElementById('count');
-    const $sort = document.getElementById('sort');
-    const $list = document.getElementById('list');
-    const $empty = document.getElementById('empty');
-
-    let currentCat = 'all';
-    let results = [...DATA];
-
-    // 칩 렌더
-    CATS.forEach((c, i)=>{
-      const b = document.createElement('button');
-      b.className = 'chip' + (i===0?' active':'');
-      b.dataset.key = c.key;
-      b.innerHTML = `<span class="emoji">${c.emoji}</span>${c.label}`;
-      b.addEventListener('click', ()=>{
-        document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
-        b.classList.add('active');
-        currentCat = c.key; apply();
-      });
-      $cats.appendChild(b);
-    });
-
-    // 필터&정렬 적용
-    function apply(){
-      const q = $q.value.trim().toLowerCase();
-      let res = [...DATA];
-      if (q) res = res.filter(f=> f.name.toLowerCase().includes(q) || (f.brand||'').toLowerCase().includes(q));
-      if (currentCat!=='all') res = res.filter(f=> f.cat===currentCat);
-
-      switch($sort.value){
-        case 'price_low':  res.sort((a,b)=>(a.price||0)-(b.price||0)); break;
-        case 'price_high': res.sort((a,b)=>(b.price||0)-(a.price||0)); break;
-        case 'review':     res.sort((a,b)=>(b.review||0)-(a.review||0)); break;
-        case 'name':       res.sort((a,b)=> (a.name||'').localeCompare(b.name||'')); break;
-        default:           res.sort((a,b)=>(b.rating||0)-(a.rating||0)); // rating
-      }
-      results = res; render();
-    }
-
-    function render(){
-      $list.innerHTML='';
-      $count.textContent = `총 ${results.length}개 상품` + ($q.value.trim()? ` • '${$q.value.trim()}' 검색 중` : '');
-      if(!results.length){ $empty.style.display='block'; return; }
-      $empty.style.display='none';
-      results.forEach(f=>{
-        const card = document.createElement('div');
-        card.style.gridColumn = 'span 6';
-        card.style.background = 'var(--card)';
-        card.style.border = '1px solid var(--border)';
-        card.style.borderRadius = '16px';
-        card.style.padding = '14px';
-        card.style.boxShadow = 'var(--shadow)';
-        card.innerHTML = `
-          <div style="display:flex; justify-content:space-between; gap:8px; align-items:flex-start;">
-            <div>
-              <div style="font-weight:700">${escapeHTML(f.name)}</div>
-              <div style="color:var(--muted); font-size:12px">${escapeHTML(f.brand||'')}</div>
-            </div>
-            <div class="chip">₩${(f.price||0).toLocaleString()}</div>
-          </div>
-          <div style="margin-top:6px; color:var(--muted); font-size:12px">⭐ ${f.rating??0} · 리뷰 ${f.review??0}개</div>
-          <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;">
-            ${(f.ings||[]).slice(0,6).map(x=>`<span class="chip">${escapeHTML(x)}</span>`).join('')}
-          </div>
-        `;
-        $list.appendChild(card);
-      });
-    }
-
-    function escapeHTML(s){
-      return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]));
-    }
-
-    // 이벤트
-    $searchBtn.addEventListener('click', apply);
-    $q.addEventListener('keydown', (e)=>{ if(e.key==='Enter') apply(); });
-    $sort.addEventListener('change', apply);
-
-    // 초기 렌더
-    apply();
-  </script>
+  <script src="app.js" defer></script>
 </body>
 </html>
