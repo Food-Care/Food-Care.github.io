@@ -96,7 +96,7 @@ function normalizeText(s){ return (s || '').toLowerCase(); }
 
 function apply(){
   const q = $q.value.trim().toLowerCase();
-  let res = [...DATA];
+  let res = [...DATA];  // JSON 순서 유지
 
   if (q) {
     res = res.filter(f => (f.name || '').toLowerCase().includes(q));
@@ -106,12 +106,15 @@ function apply(){
     res = res.filter(f => f.cat === currentCat);
   }
 
-  switch($sort.value){
-    case 'brand': res.sort((a,b)=>(a.brand||'').localeCompare(b.brand||'','ko')); break;
-    case 'name':
-    default:      res.sort((a,b)=>(a.name||'').localeCompare(b.name||'','ko'));
+  if (q || currentCat !== 'all') {
+    switch($sort.value){
+      case 'brand': res.sort((a,b)=>(a.brand||'').localeCompare(b.brand||'','ko')); break;
+      case 'name':
+      default:      res.sort((a,b)=>(a.name||'').localeCompare(b.name||'','ko'));
+    }
   }
 
+  // ✅ 아무 검색·카테고리도 없을 때 → JSON 원본 순서 앞의 6개만
   if (!q && currentCat === 'all') {
     res = res.slice(0, 6);
   }
@@ -119,6 +122,7 @@ function apply(){
   results = res;
   render();
 }
+
 
 
 function render(){
