@@ -146,7 +146,7 @@ function render(){
 
   toRender.forEach((f, idx) => {
     const id = `card-${idx}`;
-    const query = `${f.name} ${f.brand}`.trim();
+    const queryNameOnly = (f.name || '').trim();
 
     const card = document.createElement('div');
     card.className = 'product-card col-span-6';
@@ -172,7 +172,7 @@ function render(){
       </div>`;
     $list.appendChild(card);
 
-    loadImageFor(query, f.brand, f.cat).then(best => {
+    loadImageFor(queryNameOnly, f.brand, f.cat).then(best => {
       const $img = document.getElementById(`${id}-img`);
       const $a   = document.getElementById(`${id}-link`);
       if (best?.image) $img.src = best.image;

@@ -49,13 +49,12 @@ function scoreItem(it, tokens) {
   const title = stripTags(it.title || "");
   const tks = tokenize(title);
   let match = 0;
-  tokens.forEach((t) => {
-    if (t && tks.includes(t)) match += 1;
-  });
+  tokens.name.forEach(t => { if (t && tks.includes(t)) match += 3; });
+  tokens.brand.forEach(t => { if (t && tks.includes(t)) match += 2; });
 
   const w = Number(it.sizewidth || 0);
   const h = Number(it.sizeheight || 0);
-  let s = match * 3;
+  let s = match;
   if (w >= 300 && h >= 300) s += 2;
   else if (w >= 120 && h >= 120) s += 1;
 
@@ -103,7 +102,18 @@ async function searchBestImage(rawName, rawBrand, rawCat) {
   const brand = normalize(rawBrand);
   const cat = normalize(rawCat);
 
-  const baseQueries = [`${name} ${brand}`.trim(), `${name}`.trim(), `${brand} ${cat}`.trim()].filter(Boolean);
+  const nameTokens  = tokenize(name);
+  const brandTokens = tokenize(brand);
+
+  // name 안에 이미 brand 토큰이 있으면 굳이 또 붙이지 않음
+  const needBrandAppend = brandTokens.length &&
+    !nameTokens.some(t => brandTokens.includes(t));
+
+  const baseQueries = [
+    (needBrandAppend ? `${name} ${brand}` : name).trim(),
+    name.trim(),
+    `${brand} ${cat}`.trim()
+  ].filter(Boolean);
 
   const queries = [];
   for (const bq of baseQueries) {
@@ -119,7 +129,7 @@ async function searchBestImage(rawName, rawBrand, rawCat) {
 
   let best = null;
   let all = [];
-  const tokens = tokenize(name + " " + brand);
+  const tokens = { name: nameTokens, brand: brandTokens };
 
   for (const q of queries) {
     try {
@@ -137,9 +147,19 @@ async function searchBestImage(rawName, rawBrand, rawCat) {
             sizeheight: it.sizeheight || null,
           };
         })
-        .filter((it) => it.image && (it.sizewidth || 0) >= 120 && (it.sizeheight || 0) >= 120);
+        .filter(it => {
+         if (!it.image) return false;
+         if ((it.sizewidth||0) < 120 || (it.sizeheight||0) < 120) return false;
+         // 브랜드가 주어졌다면 제목/URL에 브랜드 토큰이 하나라도 있어야 함
+         if (brandTokens.length) {
+           const hay = (it.title + " " + (it.page || "")).toLowerCase();
+           const hit = brandTokens.some(t => t && hay.includes(t));
+           if (!hit) return false;
+         }
+         return true;
+       });
 
-      filtered.forEach((it) => (it._score = scoreItem(it, tokens)));
+      filtered.forEach(it => it._score = scoreItem(it, { name: nameTokens, brand: brandTokens }));
       filtered.sort((a, b) => b._score - a._score);
 
       all = all.concat(filtered);
