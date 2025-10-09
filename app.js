@@ -1,12 +1,12 @@
-const INITIAL_LIMIT = 6;
+console.log("build=2025-10-09-02");
+
+// ✅ 한 곳에서 API 주소 관리
 const API_BASE = location.hostname.includes('localhost')
-  ? ''  // 로컬: 같은 포트에서 /api 사용
-  : 'https://food-care-github-io.onrender.com'; // 배포: Render API
+  ? ''
+  : 'https://food-care-github-io.onrender.com';
 
-// 예) 이미지 로드
-const url = `${API_BASE}/api/search?query=${encodeURIComponent(f.name)}&brand=${encodeURIComponent(f.brand)}&cat=${encodeURIComponent(f.cat||'')}`;
-const r = await fetch(url, { cache: 'no-store' });
-
+// ✅ 초기 6개 미리보기
+const INITIAL_LIMIT = 6;
 
 const $q = document.getElementById('q');
 const $searchBtn = document.getElementById('searchBtn');
@@ -23,7 +23,7 @@ const PLACEHOLDER =
     <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#9aa59b' font-size='16'>이미지 로딩 중…</text>
   </svg>`);
 
-const imageCache = new Map(); // query → {image, link}
+const imageCache = new Map();
 let RAW = [];
 let DATA = [];
 let results = [];
@@ -48,14 +48,24 @@ const CAT_ICONS = new Map(Object.entries({
 init();
 
 async function init(){
-  const res = await fetch('data/product.json', { cache: 'no-store' });
-  RAW = await res.json();
-  DATA = RAW.map(it => ({
-    name: it?.제품명 ?? '',
-    brand: it?.회사명 ?? '',
-    cat: it?.카테고리 ?? '',
-    ings: Array.isArray(it?.원재료명) ? it.원재료명 : []
-  }));
+  // ✅ 로컬/배포에 따라 product.json 경로 자동 결정 (캐시 버스터 포함)
+  const productUrl = location.hostname.includes('localhost')
+    ? 'data/product.json?v=20251009'
+    : `${API_BASE}/data/product.json?v=20251009`;
+
+  const res = await fetch(productUrl, { cache: 'no-store' });
+  if (!res.ok) {
+    console.error('product.json load failed:', res.status, productUrl);
+    RAW = []; DATA = [];
+  } else {
+    RAW = await res.json();
+    DATA = RAW.map(it => ({
+      name: it?.제품명 ?? '',
+      brand: it?.회사명 ?? '',
+      cat: it?.카테고리 ?? '',
+      ings: Array.isArray(it?.원재료명) ? it.원재료명 : []
+    }));
+  }
 
   buildCategoryChips(DATA);
   apply();
@@ -88,9 +98,9 @@ function apply(){
 
   if (q) {
     res = res.filter(f => {
-      const inName = (f.name||'').toLowerCase().includes(q);
+      const inName  = (f.name||'').toLowerCase().includes(q);
       const inBrand = (f.brand||'').toLowerCase().includes(q);
-      const inIngs = (f.ings||[]).some(s => (s||'').toLowerCase().includes(q));
+      const inIngs  = (f.ings||[]).some(s => (s||'').toLowerCase().includes(q));
       return inName || inBrand || inIngs;
     });
   }
@@ -112,12 +122,10 @@ function apply(){
 function render(){
   $list.innerHTML = '';
   const qText = $q.value.trim();
-  const isInitial = !qText && currentCat === 'all'; // 초기 화면 조건(검색어 없음 + 전체 카테고리)
+  const isInitial = !qText && currentCat === 'all';
 
-  // 초기 화면엔 6개만 미리보기, 그 외엔 전체
   const toRender = isInitial ? results.slice(0, INITIAL_LIMIT) : results;
 
-  // 상단 카운트 문구
   if (isInitial) {
     $count.textContent = `총 ${results.length}개 상품 • ${INITIAL_LIMIT}개 미리보기`;
   } else {
@@ -136,7 +144,6 @@ function render(){
 
     const card = document.createElement('div');
     card.className = 'product-card col-span-6';
-
     card.innerHTML = `
       <div class="product-row">
         <div class="thumb-wrap">
@@ -144,7 +151,6 @@ function render(){
             <img id="${id}-img" class="thumb-img" alt="${escapeHTML(f.name)}" src="${PLACEHOLDER}">
           </a>
         </div>
-
         <div class="meta">
           <div class="meta-top">
             <div>
@@ -153,99 +159,24 @@ function render(){
             </div>
             <div class="chip">${escapeHTML(f.cat || '')}</div>
           </div>
-
           <div class="meta-bottom">
             ${(f.ings || []).slice(0,8).map(x=>`<span class="chip">${escapeHTML(x)}</span>`).join('')}
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
     $list.appendChild(card);
 
     loadImageFor(query, f.brand, f.cat).then(best => {
       const $img = document.getElementById(`${id}-img`);
       const $a   = document.getElementById(`${id}-link`);
-
       if (best?.image) $img.src = best.image;
-
-      if (best?.page) {
-        $a.href = best.page;
-        $a.classList.remove("disabled");
-      } else {
-        $a.removeAttribute("href");
-        $a.classList.add("disabled");
-      }
+      if (best?.page) { $a.href = best.page; $a.classList.remove("disabled"); }
+      else { $a.removeAttribute("href"); $a.classList.add("disabled"); }
     });
   });
 }
 
-
-
-const MAX_CONCURRENCY = 3;
-let inflight = 0;
-const queue = [];
-
-function schedule(task) {
-  return new Promise((resolve) => {
-    const run = async () => {
-      inflight++;
-      try { resolve(await task()); }
-      finally { inflight--; pump(); }
-    };
-    queue.push(run);
-    pump();
-  });
-}
-function pump() {
-  while (inflight < MAX_CONCURRENCY && queue.length) {
-    const fn = queue.shift();
-    fn();
-  }
-}
-
-async function loadImageFor(name, brand='', cat='') {
-  const key = `${name}@@${brand}@@${cat}`;
-  if (imageCache.has(key)) return imageCache.get(key);
-
-  return schedule(async () => {
-    try {
-      const url = `/api/search?query=${encodeURIComponent(name)}&brand=${encodeURIComponent(brand)}&cat=${encodeURIComponent(cat)}`;
-      const r = await fetch(url, { cache: "no-store" });
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      const data = await r.json();
-      const best = data?.best || null;
-      imageCache.set(key, best);
-      await delay(120);
-      return best;
-    } catch (e) {
-      console.warn("이미지 로드 실패:", name, e.message);
-      const fallback = null;
-      imageCache.set(key, fallback);
-      return fallback;
-    }
-  });
-}
-
-
-async function loadImageFor(name, brand='', cat=''){
-  const key = `${name}@@${brand}@@${cat}`;
-  if (imageCache.has(key)) return imageCache.get(key);
-
-  return schedule(async () => {
-    const base = location.hostname.includes('localhost')
-      ? ''
-      : 'https://food-care-github-io.onrender.com';
-    const url = `${base}/api/search?query=${encodeURIComponent(name)}&brand=${encodeURIComponent(brand)}&cat=${encodeURIComponent(cat)}`;
-
-    const r = await fetch(url, { cache: 'no-store' });
-    const data = await r.json().catch(()=>null);
-    const best = data?.best || null;
-    imageCache.set(key, best);
-    return best;
-  });
-}
-
-
+// ===== 큐/스로틀 & 이미지 로더 (중복 제거 버전) =====
 const _Q = []; let _active = 0;
 function schedule(task){
   return new Promise((resolve, reject)=>{
@@ -265,8 +196,21 @@ function _drain(){
     });
 }
 
-const delay = (ms)=>new Promise(r=>setTimeout(r, ms));
+async function loadImageFor(name, brand='', cat=''){
+  const key = `${name}@@${brand}@@${cat}`;
+  if (imageCache.has(key)) return imageCache.get(key);
 
+  return schedule(async () => {
+    const url = `${API_BASE}/api/search?query=${encodeURIComponent(name)}&brand=${encodeURIComponent(brand)}&cat=${encodeURIComponent(cat)}`;
+    const r = await fetch(url, { cache: 'no-store' });
+    const data = await r.json().catch(()=>null);
+    const best = data?.best || null;
+    imageCache.set(key, best);
+    return best;
+  });
+}
+
+const delay = (ms)=>new Promise(r=>setTimeout(r, ms));
 function escapeHTML(s){
   return String(s).replace(/[&<>"']/g, m => ({
     '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
