@@ -1,3 +1,4 @@
+const INITIAL_LIMIT = 6;
 const API_BASE = location.hostname.includes('localhost')
   ? ''  // 로컬: 같은 포트에서 /api 사용
   : 'https://food-care-github-io.onrender.com'; // 배포: Render API
@@ -111,15 +112,25 @@ function apply(){
 function render(){
   $list.innerHTML = '';
   const qText = $q.value.trim();
-  $count.textContent = `총 ${results.length}개 상품` + (qText ? ` • '${qText}' 검색 중` : '');
+  const isInitial = !qText && currentCat === 'all'; // 초기 화면 조건(검색어 없음 + 전체 카테고리)
 
-  if (!results.length) {
+  // 초기 화면엔 6개만 미리보기, 그 외엔 전체
+  const toRender = isInitial ? results.slice(0, INITIAL_LIMIT) : results;
+
+  // 상단 카운트 문구
+  if (isInitial) {
+    $count.textContent = `총 ${results.length}개 상품 • ${INITIAL_LIMIT}개 미리보기`;
+  } else {
+    $count.textContent = `총 ${results.length}개 상품` + (qText ? ` • '${qText}' 검색 중` : '');
+  }
+
+  if (!toRender.length) {
     $empty.style.display = 'block';
     return;
   }
   $empty.style.display = 'none';
 
-  results.forEach((f, idx) => {
+  toRender.forEach((f, idx) => {
     const id = `card-${idx}`;
     const query = `${f.name} ${f.brand}`.trim();
 
@@ -152,21 +163,23 @@ function render(){
     $list.appendChild(card);
 
     loadImageFor(query, f.brand, f.cat).then(best => {
-    const $img = document.getElementById(`${id}-img`);
-    const $a   = document.getElementById(`${id}-link`);
+      const $img = document.getElementById(`${id}-img`);
+      const $a   = document.getElementById(`${id}-link`);
 
-    if (best?.image) $img.src = best.image;
+      if (best?.image) $img.src = best.image;
 
-    if (best?.page) {
+      if (best?.page) {
         $a.href = best.page;
         $a.classList.remove("disabled");
-    } else {
+      } else {
         $a.removeAttribute("href");
         $a.classList.add("disabled");
-    }
+      }
     });
   });
 }
+
+
 
 const MAX_CONCURRENCY = 3;
 let inflight = 0;
