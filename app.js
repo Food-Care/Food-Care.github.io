@@ -223,6 +223,29 @@ function escapeHTML(s){
   })[m]);
 }
 
+// 로그인 버튼 및 모달 제어
+const $loginBtn = document.getElementById('loginBtn');
+const $loginModal = document.getElementById('loginModal');
+const $closeModal = document.getElementById('closeModal');
+
+$loginBtn.addEventListener('click', () => {
+  $loginModal.classList.remove('hidden');
+});
+
+$closeModal.addEventListener('click', () => {
+  $loginModal.classList.add('hidden');
+});
+
+// (선택) 로그인 버튼 클릭 시 테스트 콘솔 출력
+document.getElementById('doLogin').addEventListener('click', () => {
+  const email = document.getElementById('loginEmail').value;
+  const pw = document.getElementById('loginPw').value;
+  console.log(`로그인 시도: ${email} / ${pw}`);
+  alert('로그인 기능은 추후 추가 예정입니다 :)');
+  $loginModal.classList.add('hidden');
+});
+
+
 $searchBtn.addEventListener('click', apply);
 $q.addEventListener('keydown', (e)=>{ if(e.key==='Enter') apply(); });
 $sort.addEventListener('change', apply);
