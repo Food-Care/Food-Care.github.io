@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>로그인 | 식품 원재료 가이드</title>
+  <link rel="stylesheet" href="style.css?v=login-page">
+</head>
+<body>
+  <main class="login-page">
+    <h1>로그인</h1>
+    <form id="loginForm" class="login-form">
+      <label>
+        이메일
+        <input type="email" id="loginEmail" placeholder="이메일" required>
+      </label>
+      <label>
+        비밀번호
+        <input type="password" id="loginPw" placeholder="비밀번호" required>
+      </label>
+      <button type="submit" class="btn">로그인</button>
+    </form>
+    <a href="index.html" class="back-link">← 돌아가기</a>
+  </main>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const pw = document.getElementById('loginPw').value;
+      alert(`로그인 시도: ${email} / ${pw}`);
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>

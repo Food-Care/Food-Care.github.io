@@ -9,8 +9,13 @@
 <body>
   <!-- Hero -->
   <header class="hero">
+    <div class="top-bar">
+      <button id="loginBtn" class="login-btn">로그인</button>
+    </div>
+
     <h1>식품 원재료 가이드</h1>
     <p>안전하고 건강한 식품 선택을 도와드립니다</p>
+    
     <div class="search-wrap" role="search">
       <div class="search">
         <span class="icon" aria-hidden="true">🔎</span>
@@ -20,16 +25,6 @@
     </div>
   </header>
 
-  <!-- 로그인 모달 -->
-  <div id="loginModal" class="modal hidden">
-    <div class="modal-content">
-      <h3>로그인</h3>
-      <input type="email" placeholder="이메일" id="loginEmail" />
-      <input type="password" placeholder="비밀번호" id="loginPw" />
-      <button id="doLogin" class="btn">로그인</button>
-      <button id="closeModal" class="btn cancel">닫기</button>
-    </div>
-  </div>
 
   <!-- Main -->
   <main class="wrap">
