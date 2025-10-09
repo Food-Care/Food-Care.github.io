@@ -92,17 +92,14 @@ function addChip(key, label, emoji, active){
   $cats.appendChild(b);
 }
 
+function normalizeText(s){ return (s || '').toLowerCase(); }
+
 function apply(){
   const q = $q.value.trim().toLowerCase();
   let res = [...DATA];
 
   if (q) {
-    res = res.filter(f => {
-      const inName  = (f.name||'').toLowerCase().includes(q);
-      const inBrand = (f.brand||'').toLowerCase().includes(q);
-      const inIngs  = (f.ings||[]).some(s => (s||'').toLowerCase().includes(q));
-      return inName || inBrand || inIngs;
-    });
+    res = res.filter(f => (f.name || '').toLowerCase().includes(q));
   }
 
   if (currentCat !== 'all') {
@@ -115,9 +112,14 @@ function apply(){
     default:      res.sort((a,b)=>(a.name||'').localeCompare(b.name||'','ko'));
   }
 
+  if (!q && currentCat === 'all') {
+    res = res.slice(0, 6);
+  }
+
   results = res;
   render();
 }
+
 
 function render(){
   $list.innerHTML = '';
