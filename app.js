@@ -1,3 +1,12 @@
+const API_BASE = location.hostname.includes('localhost')
+  ? ''  // 로컬: 같은 포트에서 /api 사용
+  : 'https://food-care-github-io.onrender.com'; // 배포: Render API
+
+// 예) 이미지 로드
+const url = `${API_BASE}/api/search?query=${encodeURIComponent(f.name)}&brand=${encodeURIComponent(f.brand)}&cat=${encodeURIComponent(f.cat||'')}`;
+const r = await fetch(url, { cache: 'no-store' });
+
+
 const $q = document.getElementById('q');
 const $searchBtn = document.getElementById('searchBtn');
 const $cats = document.getElementById('cats');
@@ -205,23 +214,42 @@ async function loadImageFor(name, brand='', cat='') {
 }
 
 
-async function loadImageFor(query, brand=''){
-  const key = `${query}@@${brand}`;
+async function loadImageFor(name, brand='', cat=''){
+  const key = `${name}@@${brand}@@${cat}`;
   if (imageCache.has(key)) return imageCache.get(key);
-  try{
-    const url = `/api/search?query=${encodeURIComponent(query)}&brand=${encodeURIComponent(brand)}&display=5`;
-    const r = await fetch(url, { cache: "no-store" });
-    const data = await r.json();
+
+  return schedule(async () => {
+    const base = location.hostname.includes('localhost')
+      ? ''
+      : 'https://food-care-github-io.onrender.com';
+    const url = `${base}/api/search?query=${encodeURIComponent(name)}&brand=${encodeURIComponent(brand)}&cat=${encodeURIComponent(cat)}`;
+
+    const r = await fetch(url, { cache: 'no-store' });
+    const data = await r.json().catch(()=>null);
     const best = data?.best || null;
     imageCache.set(key, best);
-    await delay(200);
     return best;
-  }catch(e){
-    console.warn("이미지 로드 실패:", query, e);
-    const fallback = null;
-    imageCache.set(key, fallback);
-    return fallback;
-  }
+  });
+}
+
+
+const _Q = []; let _active = 0;
+function schedule(task){
+  return new Promise((resolve, reject)=>{
+    _Q.push({task, resolve, reject}); _drain();
+  });
+}
+function _drain(){
+  if (_active >= 3 || _Q.length === 0) return;
+  const {task, resolve, reject} = _Q.shift();
+  _active++;
+  task()
+    .then(resolve)
+    .catch(reject)
+    .finally(()=>{
+      _active--;
+      setTimeout(_drain, 120);
+    });
 }
 
 const delay = (ms)=>new Promise(r=>setTimeout(r, ms));

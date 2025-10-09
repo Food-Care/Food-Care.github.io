@@ -3,6 +3,10 @@ import axios from "axios";
 import cors from "cors";
 import "dotenv/config";
 
+// 스마트스토어/네이버쇼핑 우선 탐색
+const DOMAIN_BIASES = ["site:smartstore.naver.com", "site:shopping.naver.com"];
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -24,7 +28,7 @@ const getCache = k => {
 const setCache = (k, d) => cache.set(k, { ts: Date.now(), data: d });
 
 let lastCall = 0;
-const MIN_GAP_MS = 200;
+const MIN_GAP_MS = 250;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 const stripTags = (s="") => s.replace(/<\/?b>/g, "");
@@ -67,32 +71,52 @@ function shoppingSearchUrl(q="") {
 }
 
 async function callImageAPI(query, display=10) {
-  const elapsed = Date.now() - lastCall;
-  if (elapsed < MIN_GAP_MS) await sleep(MIN_GAP_MS - elapsed);
-
-  const url = "https://openapi.naver.com/v1/search/image.json";
-  const r = await axios.get(url, {
-    params: { query, display },
-    headers: {
-      "X-Naver-Client-Id": CID,
-      "X-Naver-Client-Secret": CSECRET
-    },
-    timeout: 10000
-  });
-  lastCall = Date.now();
-  return r.data?.items || [];
+  let tries = 0;
+  while (true) {
+    const elapsed = Date.now() - lastCall;
+    if (elapsed < MIN_GAP_MS) await sleep(MIN_GAP_MS - elapsed);
+    try {
+      const r = await axios.get("https://openapi.naver.com/v1/search/image.json", {
+        params: { query, display },
+        headers: { "X-Naver-Client-Id": CID, "X-Naver-Client-Secret": CSECRET },
+        timeout: 10000
+      });
+      lastCall = Date.now();
+      return r.data?.items || [];
+    } catch (e) {
+      const status = e.response?.status;
+      if (status === 429 && tries < 3) {
+        tries++;
+        await sleep(300 * tries); // 300ms, 600ms, 900ms
+        continue;
+      }
+      throw e;
+    }
+  }
 }
+
 
 async function searchBestImage(rawName, rawBrand, rawCat) {
   const name = normalize(rawName);
   const brand = normalize(rawBrand);
   const cat = normalize(rawCat);
 
-  const queries = [
+  // 기본 쿼리
+  const baseQueries = [
     `${name} ${brand}`.trim(),
     `${name}`.trim(),
     `${brand} ${cat}`.trim()
   ].filter(Boolean);
+
+  // 🔹 바이어스 우선: 각 baseQuery에 도메인 바이어스를 붙인 쿼리를 먼저 시도,
+  //    그래도 실패하면 마지막에 일반 쿼리들을 시도
+  const queries = [];
+  for (const bq of baseQueries) {
+    for (const bias of DOMAIN_BIASES) {
+      queries.push(`${bq} ${bias}`.trim());
+    }
+  }
+  queries.push(...baseQueries); // 최후의 보루: 일반 쿼리
 
   const key = `img:${queries.join("|")}`;
   const hit = getCache(key);
@@ -142,9 +166,9 @@ async function searchBestImage(rawName, rawBrand, rawCat) {
     best = all[0];
   }
 
-  // 🔹 페이지 없으면 검색 페이지로 fallback
   if (best && !best.page) {
-    best.page = shoppingSearchUrl(queries[0] || name);
+    // 바이어스 쿼리를 썼으니, 페이지 없을 땐 네이버 쇼핑 검색으로 폴백
+    best.page = shoppingSearchUrl(baseQueries[0] || name);
   }
 
   const payload = { queries, best: best || null };
