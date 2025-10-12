@@ -3,25 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>로그인 | 식품 원재료 가이드</title>
+  <title>위캔두 로그인</title>
   <link rel="stylesheet" href="style.css?v=login-page">
 </head>
 <body>
-  <main class="login-page">
-    <h1>로그인</h1>
-    <form id="loginForm" class="login-form">
-      <label>
-        이메일
-        <input type="email" id="loginEmail" placeholder="이메일" required>
-      </label>
-      <label>
-        비밀번호
-        <input type="password" id="loginPw" placeholder="비밀번호" required>
-      </label>
-      <button type="submit" class="btn">로그인</button>
-    </form>
-    <a href="index.html" class="back-link">← 돌아가기</a>
-  </main>
+  <nav class="navbar">
+    <div class="logo">
+      <a href="index.html">
+        <img src="./assets/logo/wecando.png" alt="로고1" />
+      </a>
+    </div>
+
+    <div class="search-wrap" role="search">
+      <div class="search">
+        <input id="q" placeholder="먹고 싶은 음식을 검색해보세요!" aria-label="검색어" />
+        <img src="./assets/search.png" class="search-icon" alt="검색 아이콘" />
+      </div>
+    </div>
+
+    <button class="login-btn">
+      <img src="./assets/login/kakao_mini.png" alt="카카오 미니" />
+    </button>
+  </nav>
+
+  <div main-section>
+    
+    <div class="slo">
+      <img src="./assets/logo/W.png" alt="로고2">
+      <p>내 몸에 딱 맞는 선택,<br>이제 위캔두 하세요!</p>
+    </div>
+
+    <div class="login_list">
+      <img src="./assets/login/kakao.png" alt="카카오">
+      <img src="./assets/login/naver.png" alt="네이버">
+      <img src="./assets/login/Google.png" alt="구글">
+      <p>이미 가입하신 계정이 있다면,<br>해당 계정으로 로그인해주세요.</p>
+    </div>
+  </div>
 
   <script>
     document.getElementById('loginForm').addEventListener('submit', e => {

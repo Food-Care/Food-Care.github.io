@@ -60,53 +60,7 @@ body {
   text-align: center;
 }
 
-/* Search */
-.search-wrap {
-  max-width: 940px;
-  margin: 16px auto 0;
-  display: flex;
-  gap: 12px;
-}
 
-.search {
-  position: relative;
-  flex: 1;
-}
-
-.search input {
-  width: 100%;
-  height: 52px;
-  padding: 0 56px 0 48px;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, .35);
-  background: rgba(255, 255, 255, .85);
-  color: #2f3b32;
-  box-shadow: var(--shadow);
-}
-
-.search input::placeholder {
-  color: #8ea086;
-}
-
-.search .icon {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 20px;
-  opacity: .8;
-}
-
-.search .btn {
-  height: 52px;
-  min-width: 88px;
-  border: none;
-  border-radius: 16px;
-  background: rgba(0, 0, 0, .12);
-  color: #fff;
-  font-weight: 700;
-  cursor: pointer;
-}
 
 /* Controls */
 .panel {
@@ -267,41 +221,187 @@ input[type="text"] {
 
 
 /* ---------------login-----------*/
-.login-page {
+body {
+  background-color: #ffffff;
+  margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+}
+
+.logo a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo img {
+  height: 20px;
+  display: block;
+}
+
+
+/* 래퍼: 가로 비율로 가운데 정렬 */
+.search-wrap{
+  display:flex;
+  justify-content:center;
+  width:100%;
+}
+
+/* 캡슐 검색바: 사진처럼 그라데이션 테두리 */
+.search{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-shrink:0;
+
+  /* 가로 비율 */
+  width:clamp(300px, 35vw, 500px);
+
+  height:54px;
+  padding:17px 24px;
+  border-radius:100px;
+
+  /* 핵심: 1px 그라데이션 보더 + 내부는 흰색 */
+  border:1px solid transparent;
+  background:
+    linear-gradient(#FFF, #FFF) padding-box,         /* 내부 흰색 */
+    linear-gradient(90deg, #48B748, #FF59B8) border-box; /* 외곽 그라데 */
+}
+
+/* 인풋: 내부 타원 효과 제거 + 기본 폰트 */
+#q{
+  flex:1;
+  border:none;
+  outline:none;
+  background:transparent;
+  font-size:14px;
+  color:#333;
+  padding-right:8px;
+}
+
+/* 오른쪽 아이콘: 초록색 이미지 그대로 사용(필터 적용 X) */
+.search-icon{
+  width:20px;
+  height:20px;
+  flex-shrink:0;
+  margin-left:8px;
+  cursor:pointer;
+}
+
+/* 포커스 시 살짝 강조(선택) */
+.search:focus-within{
+  box-shadow:0 0 0 3px rgba(72,183,72,0.12);
+  transition:box-shadow .15s ease;
+}
+
+.main-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background: #f5f6f5;
-  gap: 20px;
+  min-height: calc(100vh - 80px);
+  box-sizing: border-box;
+  text-align: center;
 }
 
-.login-form {
-  background: #fff;
-  padding: 24px 28px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+.slo {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 280px;
+  align-items: center;
+  margin-top: 72px;
+  text-align: center;
 }
 
-.login-form input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+.slo img {
+  width: 120px;
+  height: auto;
+  margin-bottom: 24px;
 }
 
-.back-link {
-  margin-top: 10px;
-  color: #2d6a4f;
-  text-decoration: none;
+.slo p {
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
 }
-.back-link:hover {
-  text-decoration: underline;
+
+/* 로그인 리스트 섹션 */
+.login_list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px; /* 버튼 간 간격 */
+  margin-top: 72px;
 }
+
+/* 로그인 버튼 이미지 */
+.login_list img {
+  width: clamp(300px, 35vw, 393px); /* Figma 기준 폭 393px, 반응형 유지 */
+  height: 54px;                     /* Figma 높이 */
+  object-fit: contain;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+.login_list img:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+}
+
+/* 안내 문구 */
+.login_list p {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+  margin-top: 40px;
+  line-height: 1.4;
+}
+
+
+
+
+
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  .search {
+    width: 80vw; /* 화면 너비 80% */
+    height: 48px;
+    padding: 14px 20px;
+  }
+
+  #q {
+    font-size: 0.9rem;
+  }
+
+  .search-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+
+/* 로그인 버튼 */
+.login-btn {
+  display: flex;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+}
+
+
+.login-btn img {
+  height: 30px;
+}
+
 
 
 
