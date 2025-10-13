@@ -210,7 +210,6 @@ input[type="text"] {
   color: #ffffff;
   font-size: 0.9rem;
   cursor: pointer;
-  padding: 4px 8px;
   transition: color 0.2s;
 }
 
@@ -231,7 +230,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 40px;
+  padding: 15px clamp(20px, 2vw, 40px);;
 }
 
 .logo a {
@@ -261,7 +260,7 @@ body {
   flex-shrink:0;
 
   /* 가로 비율 */
-  width:clamp(300px, 35vw, 500px);
+  width:clamp(100px, 35vw, 500px);
 
   height:54px;
   padding:17px 24px;
@@ -370,23 +369,6 @@ body {
 
 
 
-/* 모바일 대응 */
-@media (max-width: 768px) {
-  .search {
-    width: 80vw; /* 화면 너비 80% */
-    height: 48px;
-    padding: 14px 20px;
-  }
-
-  #q {
-    font-size: 0.9rem;
-  }
-
-  .search-icon {
-    width: 18px;
-    height: 18px;
-  }
-}
 
 
 /* 로그인 버튼 */
@@ -404,11 +386,11 @@ body {
 
 
 
+@media (max-width: 500px) {
 
 
-@media (max-width: 640px){
-  .col-span-6 { grid-column: span 12 !important; }
-}
-@media (min-width: 641px){
-  .col-span-6 { grid-column: span 6 !important; }
+
+  .navbar{
+    display: none !important;
+  }
 }

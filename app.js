@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loginBtn) {
     loginBtn.addEventListener('click', () => {
       console.log("로그인 버튼 클릭됨");
-      window.location.href = 'login.html';
+      window.location.href = './pages/login.html';
     });
   }
 });
