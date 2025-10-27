@@ -237,6 +237,14 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = './pages/login.html';
     });
   }
+
+  const btn = document.getElementById('landingBtn');
+  if (!btn) return;
+
+  btn.addEventListener('click', () => {
+    // 현재 위치 기준 상대 경로
+    window.location.href = './pages/landing.html';
+  });
 });
 
 
