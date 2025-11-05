@@ -385,6 +385,59 @@ body {
 }
 
 
+/*-------landing----*/
+
+.landing-section {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.landing-1 img {
+  width: clamp(150px, 10vw, 600px);
+  padding-top: 10vh;
+}
+
+.landing-1 p {
+  padding-top: 20px;
+  width: 70%;
+  margin: 0 auto;
+  font-weight:500;
+  font-size:large;
+}
+
+.landing-2 p{
+  padding-top: 80px;
+  font-size:medium;
+  font-weight:500;
+}
+
+.landing-3 p{
+  padding-top: 80px;
+  font-size: small;
+  font-weight:500;
+  color:#7A7A7A;
+}
+
+.second-3{
+  border: none;
+  border-radius: 4px;
+  width: 70%;
+  height: 70px;
+  font-size: medium;
+  font-weight: 500;
+  background-image: linear-gradient(to right, #21fe89, #fef969);
+}
+
+.landing-4 p{
+  padding-top: 80px;
+  
+}
+
+
+
+
+
 
 @media (max-width: 500px) {
 
