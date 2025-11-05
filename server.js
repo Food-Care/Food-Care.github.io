@@ -1,39 +1,26 @@
-// server.js
 import express from "express";
 import axios from "axios";
 import cors from "cors";
 import "dotenv/config";
 
-// ───────────────────────────────────────────────────────────────
-// 기본 설정
-// ───────────────────────────────────────────────────────────────
-const app = express();
+// 스마트스토어/네이버쇼핑 우선 탐색
+const DOMAIN_BIASES = ["site:smartstore.naver.com", "site:shopping.naver.com"];
 
-// 필요시 특정 도메인만 허용으로 변경하세요.
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 정적 파일 (Render에서 product.json 등 서빙)
+// ✅ Render에서 product.json을 서빙할 수 있게 /data 공개
 app.use("/data", express.static("./data"));
-app.use(express.static("./")); // 원하면 프런트도 같이 호스팅
 
-// 헬스체크 (Render 헬스 확인용)
-app.get("/api/health", (req, res) => res.json({ ok: true }));
+// (원하면 Render에서 프런트도 띄울 수 있게 유지)
+app.use(express.static("./"));
 
-// ───────────────────────────────────────────────────────────────
-// NAVER 이미지검색 API 준비
-// ───────────────────────────────────────────────────────────────
 const CID = process.env.NAVER_CLIENT_ID;
 const CSECRET = process.env.NAVER_CLIENT_SECRET;
-if (!CID || !CSECRET) {
-  console.warn("[WARN] NAVER_CLIENT_ID / NAVER_CLIENT_SECRET 미설정");
-}
+if (!CID || !CSECRET) console.warn("[WARN] NAVER_CLIENT_ID / NAVER_CLIENT_SECRET 미설정");
 
-// 검색 가중치용 도메인 바이어스(스마트스토어/네이버쇼핑 우선)
-const DOMAIN_BIASES = ["site:smartstore.naver.com", "site:shopping.naver.com"];
-
-// 간단 캐시(메모리)
-const CACHE_TTL = 1000 * 60 * 60 * 12; // 12시간
+const CACHE_TTL = 1000 * 60 * 60 * 12;
 const cache = new Map();
 const getCache = (k) => {
   const v = cache.get(k);
@@ -43,14 +30,10 @@ const getCache = (k) => {
 };
 const setCache = (k, d) => cache.set(k, { ts: Date.now(), data: d });
 
-// API rate 제한 대응
 let lastCall = 0;
 const MIN_GAP_MS = 250;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-// ───────────────────────────────────────────────────────────────
-// 유틸
-// ───────────────────────────────────────────────────────────────
 const stripTags = (s = "") => s.replace(/<\/?b>/g, "");
 const normalize = (s = "") =>
   s
@@ -62,25 +45,12 @@ function tokenize(s = "") {
   return normalize(s).toLowerCase().split(" ").filter(Boolean);
 }
 
-function looksLikeImageUrl(u = "") {
-  return /\.(jpg|jpeg|png|webp|gif)(\?|#|$)/i.test(u);
-}
-
-function shoppingSearchUrl(q = "") {
-  return `https://search.shopping.naver.com/search/all?query=${encodeURIComponent(q)}`;
-}
-
 function scoreItem(it, tokens) {
   const title = stripTags(it.title || "");
   const tks = tokenize(title);
-
   let match = 0;
-  tokens.name.forEach((t) => {
-    if (t && tks.includes(t)) match += 3;
-  });
-  tokens.brand.forEach((t) => {
-    if (t && tks.includes(t)) match += 2;
-  });
+  tokens.name.forEach(t => { if (t && tks.includes(t)) match += 3; });
+  tokens.brand.forEach(t => { if (t && tks.includes(t)) match += 2; });
 
   const w = Number(it.sizewidth || 0);
   const h = Number(it.sizeheight || 0);
@@ -95,9 +65,13 @@ function scoreItem(it, tokens) {
   return s;
 }
 
-// ───────────────────────────────────────────────────────────────
-// NAVER 이미지 검색 호출
-// ───────────────────────────────────────────────────────────────
+function looksLikeImageUrl(u = "") {
+  return /\.(jpg|jpeg|png|webp|gif)(\?|#|$)/i.test(u);
+}
+function shoppingSearchUrl(q = "") {
+  return `https://search.shopping.naver.com/search/all?query=${encodeURIComponent(q)}`;
+}
+
 async function callImageAPI(query, display = 10) {
   let tries = 0;
   while (true) {
@@ -123,25 +97,22 @@ async function callImageAPI(query, display = 10) {
   }
 }
 
-// ───────────────────────────────────────────────────────────────
-// 베스트 이미지 탐색 로직
-// ───────────────────────────────────────────────────────────────
 async function searchBestImage(rawName, rawBrand, rawCat) {
   const name = normalize(rawName);
   const brand = normalize(rawBrand);
   const cat = normalize(rawCat);
 
-  const nameTokens = tokenize(name);
+  const nameTokens  = tokenize(name);
   const brandTokens = tokenize(brand);
 
-  // name 안에 brand 토큰이 없으면 검색문에 브랜드를 덧붙여줌
-  const needBrandAppend =
-    brandTokens.length && !nameTokens.some((t) => brandTokens.includes(t));
+  // name 안에 이미 brand 토큰이 있으면 굳이 또 붙이지 않음
+  const needBrandAppend = brandTokens.length &&
+    !nameTokens.some(t => brandTokens.includes(t));
 
   const baseQueries = [
     (needBrandAppend ? `${name} ${brand}` : name).trim(),
     name.trim(),
-    `${brand} ${cat}`.trim(),
+    `${brand} ${cat}`.trim()
   ].filter(Boolean);
 
   const queries = [];
@@ -174,30 +145,27 @@ async function searchBestImage(rawName, rawBrand, rawCat) {
             image: img,
             sizewidth: it.sizewidth || null,
             sizeheight: it.sizeheight || null,
-            link: it.link || "",
           };
         })
-        .filter((it) => {
-          if (!it.image) return false;
-          if ((it.sizewidth || 0) < 120 || (it.sizeheight || 0) < 120) return false;
-          // 브랜드가 주어졌다면 제목/URL에 브랜드 토큰이 하나라도 있어야 함
-          if (brandTokens.length) {
-            const hay = (it.title + " " + (it.page || "") + " " + it.link).toLowerCase();
-            const ok = brandTokens.some((t) => t && hay.includes(t));
-            if (!ok) return false;
-          }
-          return true;
-        });
+        .filter(it => {
+         if (!it.image) return false;
+         if ((it.sizewidth||0) < 120 || (it.sizeheight||0) < 120) return false;
+         // 브랜드가 주어졌다면 제목/URL에 브랜드 토큰이 하나라도 있어야 함
+         if (brandTokens.length) {
+           const hay = (it.title + " " + (it.page || "")).toLowerCase();
+           const hit = brandTokens.some(t => t && hay.includes(t));
+           if (!hit) return false;
+         }
+         return true;
+       });
 
-      filtered.forEach(
-        (it) => (it._score = scoreItem(it, { name: nameTokens, brand: brandTokens }))
-      );
+      filtered.forEach(it => it._score = scoreItem(it, { name: nameTokens, brand: brandTokens }));
       filtered.sort((a, b) => b._score - a._score);
 
       all = all.concat(filtered);
       if (filtered[0]) {
         best = filtered[0];
-        break; // 충분히 좋은 결과 찾으면 빠르게 종료
+        break;
       }
     } catch (e) {
       const status = e.response?.status;
@@ -224,19 +192,13 @@ async function searchBestImage(rawName, rawBrand, rawCat) {
   return payload;
 }
 
-// ───────────────────────────────────────────────────────────────
-// API 엔드포인트
-// ───────────────────────────────────────────────────────────────
 app.get("/api/search", async (req, res) => {
   try {
-    // 프런트에서 q 또는 query 둘 다 지원
-    const q = (req.query.q || req.query.query || "").toString();
+    const q = (req.query.query || "").toString();
     const brand = (req.query.brand || "").toString();
     const cat = (req.query.cat || "").toString();
 
-    if (!q && !brand) {
-      return res.status(400).json({ error: "query or brand required" });
-    }
+    if (!q && !brand) return res.status(400).json({ error: "query or brand required" });
 
     const data = await searchBestImage(q, brand, cat);
     res.json(data);
@@ -247,9 +209,6 @@ app.get("/api/search", async (req, res) => {
     res.status(status).json({ error: "proxy_error", status, detail });
   }
 });
-
-// ───────────────────────────────────────────────────────────────
-// 서버 시작 (Render는 PORT를 환경변수로 내려줌)
-// ───────────────────────────────────────────────────────────────
-const PORT = process.env.PORT || 5173;
-app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
+// server.js 마지막
+const PORT = Number(process.env.PORT);   // ← fallback 없이
+app.listen(PORT, '0.0.0.0', () => console.log('Listening on', PORT));
