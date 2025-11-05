@@ -791,13 +791,10 @@ h1{
   padding-top: 20px;
   display:flex;
   gap:8px;
-  justify-content: center;
   margin-bottom:16px;
-  width: 100%;   
 }
 .beta-input{
   flex:1;
-  width: 380px;
   height:44px;
   border:1.5px solid #cdcdcd;
   border-radius:12px;
@@ -817,7 +814,7 @@ h1{
   color:#fff;
   border:none;
   border-radius:10px;
-  padding:0 px;
+  padding:0 18px;
   font-weight:600;
   cursor:pointer;
   transition:filter 0.15s ease;
