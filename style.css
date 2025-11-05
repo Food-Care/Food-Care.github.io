@@ -429,9 +429,413 @@ body {
   background-image: linear-gradient(to right, #21fe89, #fef969);
 }
 
-.landing-4 p{
+/* 섹션 기본 */
+.landing-4{
   padding-top: 80px;
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* 제목/부제 가운데 정렬 */
+.landing-4 > p{
+  margin: 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* 카드 그리드 */
+.reason{
+  padding-top: 40px;
+  width: 100%;
+  max-width: 900px;          /* 전체 폭 제한 */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 44px;                 /* 카드 간격 */
+}
+
+/* 카드 공통 스타일 */
+.reason > div{
+  background: #f3f3f3;
+  border: 1px solid #cdcdcd;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+  padding: 40px 16px;
+  text-align: center;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.reason > div:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+/* 카드 안 텍스트 */
+.reason > div p{
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.55;
+  color: #222;
+  word-break: keep-all;
+}
+
+/* 첫 줄(이모지 라인)만 살짝 크게 보여주기 */
+.reason > div p::first-line{
+  font-size: 22px;        /* 이모지 크게 */
+  line-height: 1.2;
+}
+
+/* 반응형: 태블릿/모바일에서 세로 스택 */
+@media (max-width: 900px){
+  .reason{
+    max-width: 700px;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 640px){
+  .reason{
+    max-width: 420px;
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+.landing-5 {
+  padding-top: 80px;
+  text-align: center;
+  max-width: 500px;          /* 전체 영역 너비 제한 */
+  margin: 0 auto;            /* 화면 중앙 정렬 */
+}
+
+/* 제목 */
+.landing-5 h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #1A1A1A;
+}
+
+/* 부제 */
+.landing-5 p {
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+
+/* 이미지 */
+.landing-5 img {
+  width: 180px;             /* 이미지 작게 줄이기 */
+  height: auto;
+  margin-top: 8px;
+}
+
+/* 반응형 - 모바일에서는 조금 더 작게 */
+@media (max-width: 480px) {
+  .landing-5 {
+    max-width: 90%;
+    padding: 40px 12px;
+  }
+  .landing-5 img {
+    width: 150px;
+  }
+}
+
+
+.landing-6 {
+  text-align: center;
+  padding-top: 80px;
+}
+
+.landing-6 h2 {
+  margin-bottom: 8px;
+}
+
+.landing-6 > p {
+  margin-bottom: 32px;
+}
+
+/* ✅ 카드 전체 레이아웃 */
+.feature {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ✅ 각 카드 스타일 */
+.feature > div {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(99, 99, 99, 0.08);
+  padding: 24px 20px;
+  display: flex;
+  align-items: flex-start;
+  text-align: left;
+  gap: 12px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.feature > div:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* ✅ 텍스트 스타일 */
+.feature p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+  line-height: 1.45;
+}
+.feature p span {
+  display: block;
+  margin-top: 4px;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+
+/* ✅ 아이콘 공통 */
+.f-icon-1,
+.f-icon-2,
+.f-icon-3,
+.f-icon-4 {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* ✅ 각 PNG 아이콘 경로 */
+.f-icon-1 { background-image: url('../assets/landing/search.png'); }   /* 식품 정보 제공 */
+.f-icon-2 { background-image: url('../assets/landing/info.png'); }     /* 식품 첨가물 정보 */
+.f-icon-3 { background-image: url('../assets/landing/filter.png'); }   /* 제외 성분 필터링 */
+.f-icon-4 { background-image: url('../assets/landing/reco.png'); }     /* 대체 식품 추천 */
+
+/* ✅ 반응형 (모바일 1열) */
+@media (max-width: 640px) {
+  .feature {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+/* 섹션 */
+.selling{
+  text-align:center;
+  padding-top: 80px;
+}
+.selling h2{
+  font-size:22px;
+  margin:0 0 8px;
+}
+.selling > p{
+  margin:0 0 28px;
+  font-size:14px;
+}
+
+/* 가격 카드 레이아웃 */
+.version{
+  padding-top: 20px;
+  max-width:920px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:20px;
+}
+
+/* 공통 카드 스타일 */
+.ver-1, .ver-2{
+  background:#fff;
+  border:1.5px solid #E6F7EE;          /* 은은한 테두리 */
+  border-radius:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,.06);
+  padding:22px 20px;
+  text-align:left;
+  position:relative;
+}
+
+/* 무료/유료 제목·요약 */
+.ver-1 > p, .ver-2 > p{
+  margin:0 0 14px;
+  font-weight:700;
+  line-height:1.45;
+}
+.ver-1 > p span,
+.ver-2 > p span{ font-weight:700; }
+
+/* 추천 뱃지 */
+.reco{
+  position:absolute;
+  top:14px; right:14px;
+  background:#12E374;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  padding:0px 20px;
+  border-radius:999px;
+}
+
+/* 항목 리스트: 아이콘 + 텍스트 가로 정렬 */
+.ver-1 [class^="ver1-list-"],
+.ver-2 [class^="ver2-list-"]{
+  display:flex;
+  align-items: center;
+  gap:10px;
+  padding:10px 4px;
+}
+.ver-1 [class^="ver1-list-"]:last-of-type,
+.ver-2 [class^="ver2-list-"]:last-of-type{ border-bottom:0; }
+
+/* 아이콘 크기 통일 */
+.ver-1 img, .ver-2 img{
+  width:18px; height:18px;
+  margin-top:2px;
+  flex-shrink:0;
+}
+
+/* 리스트 텍스트 */
+.ver-1 [class^="ver1-list-"] p,
+.ver-2 [class^="ver2-list-"] p{
+  margin:0;
+  font-size:14px;
+  color:#222;
+}
+.ver-1 [class^="ver1-list-"] p span,
+.ver-2 [class^="ver2-list-"] p span{
+  color:#666; font-weight:600;
+}
+
+/* 버튼 */
+.ver1-button,
+.ver2-button{
+  width:100%;
+  height:44px;
+  border-radius:10px;
+  font-weight:700;
+  border:0;
+  margin-top:16px;
+  cursor:pointer;
+}
+
+
+/* 무료 버튼(연한 회색) */
+.ver1-button{
+  background:#f5f5f5;
+  color:#ebebeb;
+}
+
+/* 유료 버튼(브랜드 그린) */
+.ver-2{ border-color:#18d26f; }                 /* 살짝 더 강조 */
+.ver2-button{
+  background:#18d26f;
+  color:#fff;
+  box-shadow:0 6px 14px rgba(18,227,116,.25);
+}
+
+/* hover */
+.ver1-button:hover{ filter:brightness(.98); }
+.ver2-button:hover{ filter:brightness(.96); }
+
+/* 반응형: 모바일 1열 */
+@media (max-width: 640px){
+  .version{ grid-template-columns:1fr; }
+}
+
+
+
+
+
+/* 전체 중앙 정렬 */
+.beta-wrap{
+  padding-top: 100px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* 카드 */
+.beta-card{
+  padding:40px 28px;
+  text-align:center;
+  width:100%;
+  max-width:400px;
+}
+
+.beta-icon img{
+  width:50px;
+  height:50px;
+}
+
+/* 텍스트 */
+h1{
+  padding-top: 20px;
+  font-size:20px;
+  margin:0 0 8px;
+}
+.sub{
+  font-size:14px;
+  color:var(--muted);
+  margin:0 0 24px;
+}
+
+/* 폼 */
+.beta-form{
+  padding-top: 20px;
+  display:flex;
+  gap:8px;
+  justify-content: center;
+  margin-bottom:16px;
+  width: 100%;   
+}
+.beta-input{
+  flex:1;
+  width: 380px;
+  height:44px;
+  border:1.5px solid #cdcdcd;
+  border-radius:12px;
+  padding:0 14px;
+  font-size:14px;
+  background:#f7f7f7;
+  outline:none;
+}
+.beta-input:focus{
+  border-color:var(--brand);
+  box-shadow:0 0 0 4px rgba(18,227,116,0.15);
+  background:#fff;
+}
+.beta-btn{
+  height:44px;
+  background:#18d26f;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  padding:0 px;
+  font-weight:600;
+  cursor:pointer;
+  transition:filter 0.15s ease;
+}
+.beta-btn:hover{
+  filter:brightness(0.95);
+}
+
+/* 하단 문구 */
+.beta-bottom{
+  font-size:13px;
+  color:var(--muted);
+}
+
+footer{
+  padding-top: 300px;
+  font-size:12px;
+  color:#aaa;
 }
 
 
