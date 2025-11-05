@@ -78,6 +78,27 @@ body {
   grid-template-columns: repeat(12, 1fr);
 }
 
+/* 기본 2열 */
+#list.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* 모바일에서는 1열 */
+@media (max-width: 768px) {
+  #list.grid { grid-template-columns: 1fr; }
+}
+
+/* 카드가 세로로 길게 찌그러지지 않게 */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+
 .field {
   display: grid;
   gap: 6px;
