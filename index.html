@@ -4,17 +4,237 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>식품 원재료 가이드</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="./style.css" />
 </head>
-<body>
+<!-- ✅ 처음엔 홈(랜딩)처럼 보이도록 -->
+<body class="mode-landing">
   <!-- Hero -->
-  <header class="hero">
-    <div class="top-bar">
-      <button id="loginBtn" class="login-btn">로그인</button>
+  <header class="hero hero--landing">
+    <div class="topbar">
+      <!-- 1) 로고 사진 크기 고정 -->
+      <a href="./pages/search.html" class="brand-link">
+        <img class="brand-img" src="./assets/logo/Allego.png" alt="Allego 로고" />
+      </a>
+
+      <nav class="topnav">
+        <a href="./pages/landing.html" class="link">회사소개</a>
+        <button id="loginBtn" class="btn-login">로그인</button>
+      </nav>
     </div>
-    <button id="landingBtn" type="button">Landing 페이지로 가기</button>
+
+    <div class="hero-body">
+
+      <!-- 3) 검색창 디자인 -->
+      <form class="searchbar" onsubmit="event.preventDefault();">
+        <div class="search">
+            <input id="q" placeholder="알레르기 걱정없이 검색해보세요!" aria-label="검색어" />
+            <img src="./assets/search.png" class="search-icon" alt="검색 아이콘" />
+        </div>
+      </form>
+
+      <!-- 안내 배지 -->
+      <button class="helper-pill" type="button" onclick="document.getElementById('q').focus()">
+        안전한 식품 검색을 위해 알레르기 정보를 알려주세요
+        <span class="chev">›</span>
+      </button>
+
+      <!-- 2) 카테고리 2행 × 5열 타일 -->
+      <div class="quick-cats" aria-label="빠른 카테고리">
+        <button class="cat-tile" data-cat="간편식">
+          <img src="./assets/search/간편식.png" alt="" /><span>간편식</span>
+        </button>
+        <button class="cat-tile" data-cat="라면·면류">
+          <img src="./assets/search/라면_면류.png" alt="" /><span>라면 · 면류</span>
+        </button>
+        <button class="cat-tile" data-cat="과자·초콜릿">
+          <img src="./assets/search/과자_초콜릿.png" alt="" /><span>과자 · 초콜릿</span>
+        </button>
+        <button class="cat-tile" data-cat="빵·디저트">
+          <img src="./assets/search/빵_디저트.png" alt="" /><span>빵 · 디저트</span>
+        </button>
+        <button class="cat-tile" data-cat="유제품">
+          <img src="./assets/search/유제품.png" alt="" /><span>유제품</span>
+        </button>
+        <button class="cat-tile" data-cat="음료">
+          <img src="./assets/search/음료.png" alt="" /><span>음료</span>
+        </button>
+        <button class="cat-tile" data-cat="견과류">
+          <img src="./assets/search/견과류.png" alt="" /><span>견과류</span>
+        </button>
+        <button class="cat-tile" data-cat="소스·양념">
+          <img src="./assets/search/소스_양념.png" alt="" /><span>소스 · 양념</span>
+        </button>
+        <button class="cat-tile" data-cat="가공육">
+          <img src="./assets/search/가공육.png" alt="" /><span>가공육</span>
+        </button>
+        <button class="cat-tile" data-cat="통조림">
+          <img src="./assets/search/통조림.png" alt="" /><span>통조림</span>
+        </button>
+      </div>
+    </div>
   </header>
 
-  <script src="app.js" defer></script>
+  <!-- ===== 검색 결과 영역 ===== -->
+    <main class="results">
+
+        <!-- 카운트/정렬 툴바 (정렬 안 쓰면 select는 지워도 됨)
+        <div class="toolbar">
+            <div id="count" class="count"></div>
+            <select id="sort" class="sort">
+            <option value="name">이름순</option>
+            <option value="brand">브랜드순</option>
+            </select>
+        </div> -->
+
+        <!-- 비어있음 표시 -->
+        <div id="empty" class="empty" style="display:none;">조건에 맞는 상품이 없어요.</div>
+
+        <!-- 상품 카드 리스트 -->
+        <div id="list" class="product-grid"></div>
+    </main>
+
+
+
+  <script src="./app.js" defer></script>
+
+<script>
+/* 랜딩 해제 + 카테고리 바 접기 */
+function exitLanding(){
+  document.body.classList.remove('mode-landing');
+  const quick = document.querySelector('.quick-cats');
+  if (quick){
+    quick.classList.add('is-compact');
+    attachQuickCatsNav(quick); // 좌/우 버튼 생성+동작
+  }
+}
+
+function attachQuickCatsNav(quick){
+  if (!quick || !quick.classList.contains('is-compact')) return;
+
+  // ① 래퍼가 없으면 자동 생성해서 quick-cats를 감쌈
+  let wrap = quick.parentElement;
+  if (!wrap || !wrap.classList.contains('quick-cats-wrap')){
+    wrap = document.createElement('div');
+    wrap.className = 'quick-cats-wrap';
+    quick.replaceWith(wrap);
+    wrap.appendChild(quick);
+    // 버튼용 패딩은 래퍼가 담당 → 트랙은 패딩 제거(있다면)
+    quick.style.paddingLeft = '0';
+    quick.style.paddingRight = '0';
+  }
+
+  // ② 좌/우 버튼(래퍼에 붙임, 스크롤은 quick만)
+  let prev = wrap.querySelector('.cats-prev');
+  let next = wrap.querySelector('.cats-next');
+  if (!prev || !next){
+    prev = document.createElement('button');
+    next = document.createElement('button');
+    prev.type = next.type = 'button';
+    prev.className = 'cats-nav cats-prev';
+    next.className = 'cats-nav cats-next';
+    prev.setAttribute('aria-label','이전');
+    next.setAttribute('aria-label','다음');
+    prev.textContent = '‹';
+    next.textContent = '›';
+    wrap.append(prev, next);
+  }
+
+  // ③ 이동/상태 로직
+  const step = () => Math.max(160, Math.round(wrap.clientWidth * 0.8)); // 래퍼 기준
+  const clamp = v => Math.min(Math.max(v, 0), Math.max(0, quick.scrollWidth - quick.clientWidth));
+  const scrollByClamped = dx => quick.scrollTo({ left: clamp(quick.scrollLeft + dx), behavior: 'smooth' });
+
+  prev.onclick = () => scrollByClamped(-step());
+  next.onclick = () => scrollByClamped(+step());
+
+  // 휠로도 가로 스크롤
+  quick.addEventListener('wheel', (e)=>{ if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){ quick.scrollLeft += e.deltaY; e.preventDefault(); }},{passive:false});
+
+  function updateNav(){
+    const overflow = quick.scrollWidth > quick.clientWidth + 1;
+    const atStart  = quick.scrollLeft <= 1;
+    const atEnd    = quick.scrollLeft + quick.clientWidth >= quick.scrollWidth - 1;
+    prev.style.display = next.style.display = overflow ? '' : 'none';
+    if (overflow){ prev.disabled = atStart; next.disabled = atEnd; }
+  }
+
+  quick.addEventListener('scroll', updateNav, { passive:true });
+  window.addEventListener('resize', updateNav);
+  new ResizeObserver(updateNav).observe(quick);
+  updateNav();
+}
+
+/* (호출 호환용) 기존 이름 유지 */
+function updateEdgeState(quick){
+  // 새 로직으로 위임
+  if (quick) {
+    const prev = quick.querySelector('.cats-prev');
+    const next = quick.querySelector('.cats-next');
+    if (!prev || !next) return;
+    // attachQuickCatsNav 안의 updateNav와 동일 계산
+    const overflow = quick.scrollWidth > quick.clientWidth + 1;
+    const atStart  = quick.scrollLeft <= 1;
+    const atEnd    = quick.scrollLeft + quick.clientWidth >= quick.scrollWidth - 1;
+    prev.style.display = next.style.display = overflow ? '' : 'none';
+    prev.disabled = atStart;
+    next.disabled = atEnd;
+  }
+}
+
+
+/* 카테고리 선택: 검색 상태 적용 + 활성 표시 */
+function selectCategory(cat) {
+  exitLanding();
+
+  const $q = document.getElementById('q');
+  if ($q) $q.value = '';
+
+  // 결과 갱신
+  window.currentCat = (typeof normCat === 'function') ? normCat(cat) : cat;
+  if (typeof window.apply === 'function') window.apply();
+
+  // 타일 활성 & 중앙 보이기
+  const quick = document.querySelector('.quick-cats');
+  if (quick){
+    const tiles = Array.from(quick.querySelectorAll('.cat-tile'));
+    tiles.forEach(b => b.classList.remove('active'));
+    const tile = tiles.find(b => (b.dataset.cat || '').replace(/\s/g,'') === (cat || '').replace(/\s/g,''));
+    if (tile){
+      tile.classList.add('active');
+      tile.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+    }
+    attachQuickCatsNav(quick);
+  }
+
+  document.getElementById('list')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* 초기 바인딩 */
+document.addEventListener('DOMContentLoaded', () => {
+  // 카테고리 클릭
+  document.querySelectorAll('.cat-tile[data-cat]').forEach(btn => {
+    btn.addEventListener('click', () => selectCategory(btn.dataset.cat || 'all'));
+  });
+
+  // 검색 아이콘/엔터 → 랜딩 해제만 (실제 검색 로직은 app.js의 apply가 담당)
+  const form = document.querySelector('.searchbar');
+  form?.addEventListener('submit', (e) => { e.preventDefault(); exitLanding(); });
+
+  // 혹시 처음부터 compact로 시작한다면 버튼 상태 맞추기
+  const quick = document.querySelector('.quick-cats');
+  if (quick?.classList.contains('is-compact')) attachQuickCatsNav(quick);
+});
+</script>
+
+
+
+  <footer class="landing-footer">
+    <small>© 2025 Allego. All rights reserved.</small>
+    <p class="credit">
+      Image by <a href="https://www.freepik.com/author/pch-vector" target="_blank" rel="noopener">pch.vector</a>
+      on <a href="https://www.freepik.com" target="_blank" rel="noopener">Freepik</a>
+    </p>
+  </footer>
 </body>
 </html>
+
