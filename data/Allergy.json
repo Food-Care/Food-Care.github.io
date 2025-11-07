@@ -1,0 +1,917 @@
+{
+    "난류(계란)": {
+        "danger": {
+            "list": [
+                "계란", 
+                "전란", 
+                "난백", 
+                "난황", 
+                "난분말", 
+                "난각막분말", 
+                "마요네즈",
+                "에그",
+                "카스타드",
+                "알가공품"
+        ],
+            "exact_match": [
+                "알"
+            ],
+            "prefix": [],
+            "suffix": [
+                "알"
+            ],
+            "prefix_exclusions": [
+                
+            ],
+            "suffix_exclusions": [
+                "명태알",
+                "철갑상어알",
+                "날치알",
+                "호스이앤알",
+                "포티윰알",
+                "열빙어알",
+                "오징어알",
+                "우스타소스믹스-알",
+                "생선알",
+                "성게알",
+                "복분자알",
+                "재첩알",
+                "청어알",
+                "호두알",
+                "대구알",
+                "복합간장맛분말-알"
+            ]
+        },
+        "caution": {
+            "list": [
+                "쿠키",
+                "케익",
+                "머스타드"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": []
+    },
+
+    "우유": {
+        "danger": {
+            "list": [
+                "우유", 
+                "분유", 
+                "유청",
+                "카제인", 
+                "치즈",
+                "버터",
+                "크림",
+                "요구르트",
+                "연유",
+                "연우",
+                "유당",
+                "낙우밀", 
+                "밀크", 
+                "밀키",
+                "유지밀", 
+                "크리밀", 
+                "파마산",
+                "CPP",
+                "MILK",
+                "Whey",
+                "가공유",
+                "유단백",
+                "분유",
+                "락토",
+                "마가린",
+                "유장",
+                "생지",
+                "체다",
+                "우유단백가수분해물분말",
+                "분말유지"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [
+                "쿠키",
+                "케익",
+                "카스타드",
+                "땅콩버터향",
+                "버터맛분말",
+                "버터맛시즈닝",
+                "버터밀크향",
+                "버터스카치향",
+                "버터치즈향",
+                "버터크림향",
+                "버터향",
+                "버터향(착향료)",
+                "버터향1분말",
+                "버터향오일",
+                "버터후레바향분말",
+                "인공버터향",
+                "착향료(버터향",
+                "천연버터향",
+                "토스티드버터향",
+                "합성착향료(버터향)",
+                "합성착향료버터향",
+                "허니버터맛씨즈닝",
+                "허니버터맛씨즈닝-A",
+                "허니버터향"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "땅콩버터",
+            "피넛버터",
+            "식물성",
+            "코코넛크림",
+            "아몬드크림",
+            "비유지방아이스크림믹스",
+            "멸치가공유",
+            "가공전지분",
+            "가공탈지분",
+            "가수분해",
+            "갈락토",
+            "프락토",
+            "락토바실러스"
+        ]
+    },
+    "메밀": {
+        "danger": {
+            "list": [
+                "메밀"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "합성착향료"
+        ]
+    },
+    "땅콩": {
+        "danger": {
+            "list": [
+                "땅콩", 
+                "낙화생",
+                "피넛",
+                "피넛츠",
+                "피너츠"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": []
+    },
+    "밀": {
+        "danger": {
+            "list": [ 
+                "밀가루", 
+                "소맥", 
+                "통밀", 
+                "글루텐", 
+                "빵가루", 
+                "부침가루", 
+                "밀쌀", 
+                "빵류", 
+                "하이라이스", 
+                "카레", 
+                "wheat", 
+                "WHEAT",
+                "강력분",
+                "중력분",
+                "박력분",
+                "flour",
+                "강력",
+                "중력",
+                "박력",
+                "생지",
+                "고로케",
+                "제면",
+                "노바밀1500엠지",
+                "도우",
+                "만두피",
+                "배터",
+                "빈사과",
+                "수제비",
+                "스파게티",
+                "반죽",
+                "페스츄리",
+                "튀김가루",
+                "카스텔라",
+                "춘권피",
+                "쿠키",
+                "케익",
+                "햄버거번",
+                "화이트루",
+                "유탕면류",
+                "튀김"
+            ],
+            "exact_match": [
+                "번",
+                "면",
+                "루",
+                "빵",
+                "밀"
+            ],
+            "prefix": [],
+            "suffix": [
+                "면",
+                "빵"
+            ],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [
+                "곡류가공품"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "찹쌀깨찰빵",
+            "빵개량제"
+        ]
+    },
+    "대두": {
+        "danger": {
+            "list": [
+                "대두", 
+                "콩", 
+                "백태",  
+                "콩기름", 
+                "간장", 
+                "된장", 
+                "고추장", 
+                "두부", 
+                "두유", 
+                "유부", 
+                "콩단백", 
+                "레시틴",
+                "춘장",
+                "짜장",
+                "청국장",
+                "낫토",
+                "비지",
+                "토코페롤",
+                "이디티에",
+                "식물성검질",
+                "야채전분",
+                "식물성단백질",
+                "쓰유",
+                "쯔유",
+                "어묵",
+                "오리엔탈",
+                "소이",
+                "메주",
+                "두반장",
+                "다대기",
+                "서리태",
+                "쌈장",
+                "도두",
+                "자장",
+                "장국",
+                "정제대두유",
+                "인절미",
+                "거피",
+                "흰앙금",
+                "혼합장"
+            ],
+            "exact_match": [
+                "콩"
+            ],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [
+                "곡류가공품",
+                "분쇄가공육제품"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "호두", 
+            "땅콩",
+            "대두갈치살",
+            "대두갈치포",
+            "대두레시틴",
+            "대두이소플라본",
+            "대두인지질",
+            "대두잎",
+            "땅콩기름",
+            "완두콩",
+            "이집트콩",
+            "렌즈콩",
+            "병아리콩",
+            "로커스트콩",
+            "대두갈치",
+            "강낭콩"
+        ]
+    },
+    "고등어": {
+        "danger": {
+            "list": [
+                "고등어"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": []
+    },
+    "게": {
+        "danger": {
+            "list": [
+                "꽃게", 
+                "가재",
+                "게장",
+                "대게",
+                "게맛살",
+                "홍게",
+                "돌게"
+            ],
+            "exact_match": [
+                "게"
+            ],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [
+                "게후레바",
+                "게 후레바",
+                "게푸레바"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "성게",            
+            "멍게"
+        ]
+    },
+    "새우": {
+        "danger": {
+            "list": [
+                "새우", 
+                "새우젓", 
+                "건새우", 
+                "새우분말", 
+                "크릴", 
+                "대하"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": []
+    }, 
+    "돼지고기": {
+        "danger": {
+            "list": [
+                "돼지고기", 
+                "돈육", 
+                "햄", 
+                "베이컨", 
+                "돈지", 
+                "라드",
+                "돈골",
+                "돈기름",
+                "돈피콜라겐",
+                "돼지",
+                "감자탕",
+                "포크"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [
+                "소시지", 
+                "소세지",
+                "젤라틴",
+                "양념육류",
+                "분쇄가공육제품",
+                "혼합식육추출가공품",
+                "식육추출가공품"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "햄버거",
+            "캘리포니아햄용",
+            "어육소시지",
+            "소세지빵용",
+            "베이컨씨즈닝분말",
+            "생선젤라틴",
+            "피쉬젤라틴",
+            "캅셀: 젤라틴",
+            "칼라드",
+            "돼지감자",
+            "돼지호박"
+        ]
+    },
+    "토마토": {
+        "danger": {
+            "list": [
+                "토마토", 
+                "하이라이스", 
+                "스파게티"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": []
+    },
+    "복숭아": {
+        "danger": {
+            "list": [
+                "복숭아",
+                "복숭"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [
+                "사과",
+                "애플",
+                "자두",
+                "살구",
+                "체리",
+                "딸기",
+                "라즈베리",
+                "매실",
+                "매실나무열매",
+                "키위",
+                "토마토",
+                "오렌지",
+                "감귤류",
+                "셀러리"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "복숭아꽃",
+            "복숭아맛",
+            "복숭아향",
+
+            "사과산",
+            "빈사과",
+            "빙사과",
+            "사과나무",
+            "사과맛",
+            "사과향",
+            "살구향",
+            "살구맛",
+            "체리맛",
+            "체리향",
+            "딸기맛",
+            "딸기색소",
+            "딸기향",
+            "딸기시럽",
+            "딸기칼라",
+            "라즈베리향",
+            "매실나무",
+            "매실향",
+            "향료",
+            "합성",
+            "키위향",
+            "셀러리씨",
+            "오렌지향",
+            "오렌지 식용색소",
+            "오렌지색소",
+            "오렌지오일",
+            "오렌지펄프",
+            "오렌지맛",
+            "오렌지레진",
+            "오렌지칼라"
+        ]
+    },
+    "아황산류": {
+        "danger": {
+            "list": [
+                "아황산", 
+                "이산화황"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": []
+    },
+    "호두": {
+        "danger": {
+            "list": [
+                "호두",
+                "피칸"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": [
+                
+            ]
+        },
+        "exclusions": []
+    },
+    "닭고기": {
+        "danger": {
+            "list": [
+                "닭고기", 
+                "계육", 
+                "치킨", 
+                "가라아게", 
+                "닭",
+                "계내금",
+                "계육"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [
+                "분쇄가공육제품",
+                "혼합식육추출가공품"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "시즈닝",
+            "치킨튀김가루",
+            "치킨양념",
+            "씨즈닝",
+            "펄닭새우"
+        ]
+    },
+    "쇠고기": {
+        "danger": {
+            "list": [
+                "쇠고기", 
+                "소고기", 
+                "우육", 
+                "비프",
+                "사골", 
+                "한우", 
+                "미트",
+                "식용우지",
+                "우골"
+            ],
+            "exact_match": [
+                "소"
+            ],
+            "prefix": [
+                "소",
+                "소다리살",
+                "소다시다"
+            ],
+            "suffix": [],
+            "prefix_exclusions": [
+                "소르",
+                "소금",
+                "소나무",
+                "소다",
+                "소두구",
+                "소라",
+                "소리",
+                "소맥",
+                "소회향",
+                "소미산탄",
+                "소보루",
+                "소보로",
+                "소브산",
+                "소성칼륨",
+                "소세지",
+                "소스",
+                "소시지",
+                "소엽",
+                "소이",
+                "소주",
+                "소트닝",
+                "소포제",
+                "소표크리마"
+            ],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [
+                "소시지", 
+                "소세지",
+                "젤라틴",
+                "하이라이스",
+                "양념육류",
+                "분쇄가공육제품",
+                "혼합식육추출가공품",
+                "식육추출가공품"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "인공쇠고기향",
+            "염소고기",
+            "돈사골",
+            "돼지사골",
+            "돼지젤라틴",
+            "생선젤라틴",
+            "젤라틴(돼지)",
+            "피쉬젤라틴",
+            "어육소시지"
+        ]
+    },
+    "오징어": {
+        "danger": {
+            "list": [
+                "오징어", 
+                "한치", 
+                "꼴뚜기",
+                "주꾸미",
+                "낙지",
+                "주꾸미",
+                "문어"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [
+                "조미건어포"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "오징어먹물색소",
+            "오징어향"
+        ]
+    },
+    "조개류": {
+        "danger": {
+            "list": [
+                "조개", 
+                "굴", 
+                "전복", 
+                "홍합", 
+                "바지락", 
+                "가리비", 
+                "꼬막", 
+                "재첩", 
+                "소라", 
+                "백합",
+                "골뱅이",
+                "다슬기",
+                "대합",
+                "갯고둥",
+                "관자",
+                "고둥",
+                "조갯살"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "덩굴",
+            "굴비",
+            "둥굴레",
+            "백합꽃"
+        ]
+    },
+    "잣": {
+        "danger": {
+            "list": [
+                "잣"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "잣나무"
+        ]
+    },
+    "호밀": {
+        "danger": {
+            "list": [
+                "호밀"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": []
+    },
+    "귀리": {
+        "danger": {
+            "list": [
+                "귀리", 
+                "오트", 
+                "오트밀"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "귀리잎"
+        ]
+    },
+    "보리": {
+        "danger": {
+            "list": [
+                "보리", 
+                "맥아", 
+                "대맥", 
+                "겉보리", 
+                "보릿"
+            ],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "caution": {
+            "list": [],
+            "exact_match": [],
+            "prefix": [],
+            "suffix": [],
+            "prefix_exclusions": [],
+            "suffix_exclusions": []
+        },
+        "exclusions": [
+            "보리새우",
+            "보리수",
+            "보리멸",
+            "합성착향료",
+            "세이보리"
+        ]
+    }
+}
