@@ -25,10 +25,13 @@
     <div class="hero-body">
 
       <!-- 3) 검색창 디자인 -->
-      <form class="searchbar" onsubmit="event.preventDefault();">
+      <form class="searchbar" id="searchForm" onsubmit="return false;">
         <div class="search">
-            <input id="q" placeholder="알레르기 걱정없이 검색해보세요!" aria-label="검색어" />
+          <input id="q" placeholder="알레르기 걱정없이 검색해보세요!" aria-label="검색어" />
+          <!-- 버튼으로 감싸 submit 트리거 -->
+          <button id="searchBtn" type="submit" class="search-btn" aria-label="검색">
             <img src="./assets/search.png" class="search-icon" alt="검색 아이콘" />
+          </button>
         </div>
       </form>
 

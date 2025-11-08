@@ -11,6 +11,7 @@ const INITIAL_LIMIT = 6;
 // ===== DOM =====
 const $q         = document.getElementById('q');
 const $searchBtn = document.getElementById('searchBtn');
+const $searchForm= document.getElementById('searchForm'); // ✅ 추가
 const $cats      = document.getElementById('cats');
 const $count     = document.getElementById('count');
 const $sort      = document.getElementById('sort');
@@ -261,3 +262,47 @@ $sort && $sort.addEventListener('change', apply);
 function normCat(s){
   return String(s || '').replace(/\s*·\s*/g, '·').trim();
 }
+
+// ===== 검색 실행 =====
+function handleSearch() {
+  // 검색 모드로 전환
+  document.body.classList.remove('mode-landing');
+  // 카테고리는 전체로 초기화(검색 우선)
+  window.currentCat = 'all';
+
+  apply(); // 필터/정렬/렌더
+
+  // 결과 영역으로 스크롤
+  document.getElementById('list')?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  });
+}
+
+// Enter, 버튼 클릭, 아이콘 클릭, 폼 제출 모두 한곳으로 수렴
+$searchForm && $searchForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  handleSearch();
+});
+
+$searchBtn && $searchBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  handleSearch();
+});
+
+// 아이콘 이미지 직접 클릭해도 동작 (접근성 보완)
+document.querySelector('.search-icon')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  $searchForm?.requestSubmit(); // submit 이벤트 트리거
+});
+
+// 입력창에서 Enter 눌러도 검색
+$q && $q.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    handleSearch();
+  }
+});
+
+// 정렬 변경 시 즉시 반영
+$sort && $sort.addEventListener('change', apply);
