@@ -108,42 +108,36 @@ body.mode-landing .wrap { display: none; }
 /* ========== 접힘(Compact) : 1행 가로 바 ========== */
 .quick-cats.is-compact{
   /* 레이아웃 */
-  display:flex; flex-wrap:nowrap; flex-direction:row; align-items:center; justify-content:center; gap:10px;
+  display:flex; flex-wrap:nowrap; flex-direction:row; align-items:center; justify-content:flex-start; gap:10px;
   position:relative;
-  padding:6px 44px;                 /* 좌우 버튼 자리 */
-  margin:0 auto; max-width:100%;    /* 중앙 배치 + 폭 제한 */
-  border-bottom:1px solid #eee;     /* 하단 구분선 */
+  padding:6px 0;                 /* 내부 패딩 제거(버튼 공간은 래퍼가 가짐) */
+  margin:0 auto; max-width:100%;
+  border-bottom:1px solid #eee;
 
   /* 스크롤 */
   overflow-x:auto; overflow-y:hidden;
   overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;            /* Firefox 숨김 */
-}
-.quick-cats.is-compact::-webkit-scrollbar{ height:0; background:transparent; } /* WebKit 숨김 */
+  scrollbar-width:none;
 
+  /* 버튼 영역만큼 끝까지 스크롤 여유 확보 */
+  scroll-padding-left:44px;
+  scroll-padding-right:44px;
+}
 .quick-cats.is-compact .cat-tile{
   display:flex; flex-direction:row; align-items:center; gap:8px;
-  flex:0 0 auto; height:auto; padding:6px 10px;  /* 줄바꿈 방지 + 컴팩트 패딩 */
+  flex:0 0 auto; height:auto; padding:6px 10px;     /* 줄바꿈 방지 + 컴팩트 패딩 */
 }
 .quick-cats.is-compact .cat-tile img{ width:36px; height:36px; border-radius:50%; flex-shrink:0; }
 .quick-cats.is-compact .cat-tile span{ font-size:13px; white-space:nowrap; color:#222; transition:color .2s ease; }
-
-/* 활성 상태 */
 .quick-cats.is-compact .cat-tile.active span{ color:#12E374; font-weight:600; }
 
-/* 스크롤 래퍼: 버튼은 여기 고정, 안쪽 트랙(.quick-cats)만 스크롤 */
+/* ========== 스크롤 래퍼 & 좌/우 버튼 ========== */
+/* 래퍼: 버튼은 여기 고정, 안쪽 트랙(.quick-cats)만 스크롤 */
 .quick-cats-wrap{
   position:relative;
   max-width:min(80vw, 1100px);
   margin:0 auto;
-  padding:6px 44px;              
-}
-
-/* 트랙: 오직 스크롤만 담당 (패딩 없음) */
-.quick-cats-wrap .quick-cats{
-  overflow-x:auto; overflow-y:hidden;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
+  padding:6px 44px;             /* 좌우 버튼 자리 확보 + 위아래 살짝 여백 */
 }
 .quick-cats-wrap .quick-cats::-webkit-scrollbar{ height:0; background:transparent; }
 
@@ -155,9 +149,247 @@ body.mode-landing .wrap { display: none; }
   display:grid; place-items:center; cursor:pointer; z-index:10;
   box-shadow:0 6px 18px rgba(0,0,0,.12);
 }
-.quick-cats-wrap .cats-prev{ left:4px; }
-.quick-cats-wrap .cats-next{ right:4px; }
+.quick-cats-wrap .cats-prev{ left:6px; }
+.quick-cats-wrap .cats-next{ right:6px; }
 .quick-cats-wrap .cats-nav:disabled{ opacity:.35; cursor:default; pointer-events:none; }
+
+
+
+
+/* 레이아웃 */
+.page-allergy .container{ max-width:900px; margin:24px auto 56px; padding:0 16px; }
+.h-center{ text-align:center; margin:12px 0 24px; line-height:1.4; }
+
+.allergy-groups .group{ margin:18px 0 28px; }
+.group-title{ font-size:15px; color:#3a3d3a; margin:8px 0 12px; }
+.row{ display:flex; flex-wrap:wrap; gap:18px; }
+
+/* 카드 타일 */
+.pick{
+  position:relative;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  width:120px;
+  padding:10px;
+  background:#fff; border:1px solid #e9ece6; border-radius:10px;
+  box-shadow:0 1px 0 rgba(0,0,0,.04);
+  cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.pick:hover{ transform:translateY(-2px); box-shadow:0 10px 26px rgba(0,0,0,.07); }
+.pick img{ width:96px; height:96px; object-fit:cover; border-radius:8px; display:block; }
+.pick span{ font-size:13px; color:#2c302c; }
+
+/* 선택 상태 */
+.pick.is-picked{ border-color:#12e374; box-shadow:0 0 0 2px rgba(18,227,116,.25); }
+.pick .sev-dot{
+  content:""; position:absolute; top:6px; right:6px;
+  width:10px; height:10px; border-radius:50%;
+  box-shadow:0 0 0 2px #fff;
+}
+.pick[data-sev="danger"] .sev-dot{ background:#ff4d4f; }
+.pick[data-sev="caution"] .sev-dot{ background:#ffb64d; }
+
+/* 하단 버튼 */
+.actions{ display:flex; justify-content:center; margin-top:18px; }
+.btn{ padding:10px 16px; border-radius:8px; background:#f3f3f3; border:0; cursor:pointer; }
+.btn-primary{ background:#16d858; color:#fff; }
+.btn[disabled]{ opacity:.45; cursor:not-allowed; }
+
+
+
+/* ========== Severity Dialog (위험/주의) ========== */
+.modal .sev-card{ max-width: 560px; padding: 20px 20px 16px; }
+.sev-card h3{ font-size: 20px; margin: 6px 0 8px; }
+.sev-card .subtext{
+  margin: 0 0 14px; color:#6b7280; line-height:1.5;
+}
+.hide-sm{ display:none; } /* 필요시 반응형에서만 줄바꿈 보이게 */
+
+/* 옵션 리스트 */
+.radio-list{ display:flex; flex-direction:column; gap:10px; }
+
+/* 공통 카드 */
+.option{
+  position: relative;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 14px 14px 44px;        /* 왼쪽 점 공간 */
+  border:1px solid #e9ece6;
+  border-radius:12px;
+  background:#fff;
+  transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+  cursor:pointer;
+}
+
+/* 라디오 숨김(접근성 유지) */
+.option input{
+  position:absolute; inset:0; opacity:0; cursor:pointer;
+}
+
+/* 왼쪽 컬러 점 */
+.option::before{
+  content:"";
+  position:absolute; left:14px; top:50%; transform:translateY(-50%);
+  width:14px; height:14px; border-radius:50%;
+  box-shadow:0 0 0 2px #fff;
+}
+.option.danger::before{ background:#ef4444; }   /* 빨강 */
+.option.caution::before{ background:#f59e0b; }  /* 주황 */
+
+/* 텍스트 */
+.opt-body{ display:flex; flex-direction:column; }
+.opt-body b{ font-weight:700; color:#111827; }
+.opt-body span{ color:#6b7280; font-size:14px; margin-top:2px; }
+
+/* 기본 테두리 색 */
+.option.danger{ border-color:#fbd5d5; }
+.option.caution{ border-color:#fde6c8; }
+
+/* hover */
+.option:hover{ box-shadow: 0 4px 16px rgba(0,0,0,.06); }
+
+/* 선택 상태 ( :has 는 최신 브라우저에서 지원 ) */
+.option:has(input:checked){
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.02);
+}
+.option.danger:has(input:checked){
+  border-color:#ef4444;
+  background: #fff7f7;
+}
+.option.caution:has(input:checked){
+  border-color:#f59e0b;
+  background: #fffbf2;
+}
+
+/* 하단 버튼 바: 가로 꽉 차게 */
+.modal-actions.fill{
+  display:flex; gap:10px; margin-top:14px;
+}
+.modal-actions.fill .btn{ flex:1; height:44px; font-weight:600; }
+
+/* 버튼 스타일(프로젝트 공통 규칙에 맞춰 최소 정의) */
+.btn{ border:0; border-radius:10px; padding:0 14px; cursor:pointer; }
+.btn-ghost{ background:#f3f4f6; color:#111827; }
+.btn-ghost:hover{ background:#e5e7eb; }
+.btn-primary{ background:#16d858; color:#fff; }
+.btn-primary:hover{ filter:brightness(0.95); }
+
+
+/* 1) dialog의 기본 테두리 제거 */
+#severityDlg,
+#severityDlg::backdrop {
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 10px;
+}
+
+/* 팝업 내부 스크롤 (페이지 CSS 재사용) */
+.modal .allergy-groups{
+  max-height: 60vh;
+  overflow: auto;
+  padding-right: 6px;
+}
+
+
+
+/* 모달 헤더: 제목 중앙, 닫기버튼 오른쪽 정렬 */
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;   /* h3 중앙 정렬 */
+  position: relative;        /* 닫기 버튼 절대 위치 */
+  padding: 10px 0 12px;
+}
+
+/* 제목 스타일 */
+.modal-head h3 {
+  flex: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #111827;
+}
+
+/* 닫기 버튼 오른쪽 */
+.modal-head .icon-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;          /* 테두리 제거 */
+  background: transparent; /* 배경 제거 */
+  font-size: 20px;
+  cursor: pointer;
+  color: #6b7280;
+  line-height: 1;
+}
+
+.modal-head .icon-btn:hover {
+  color: #111827;        /* hover 시 약간 진하게 */
+}
+
+
+
+
+
+
+/* ✅ dialog 기본 테두리/외곽선 제거 */
+.modal[open] { border:0; outline:none; }
+.modal::backdrop { background: rgba(0,0,0,.45); }
+
+/* 상단 선택 카드 영역 */
+.picked-wrap{
+  display:flex; flex-wrap:wrap; gap:12px;
+  margin-bottom:18px;
+}
+.pick-card{
+  position:relative;
+  width:88px; padding:8px; border-radius:12px; background:#fff;
+  box-shadow:0 1px 0 rgba(0,0,0,.04), 0 8px 30px rgba(0,0,0,.06);
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+}
+.pick-card img{ width:60px; height:60px; object-fit:cover; border-radius:10px; }
+.pick-card .name{ font-size:12px; color:#2c302c; }
+
+/* severity 점 */
+.pick-card .sev-dot{
+  position:absolute; top:6px; right:6px; width:10px; height:10px; border-radius:50%;
+  box-shadow:0 0 0 2px #fff;
+}
+.pick-card .sev-dot.danger{ background:#ef4444; }
+.pick-card .sev-dot.caution{ background:#f59e0b; }
+
+/* 상단 카드의 삭제 버튼 */
+.pick-card .chip-del{
+  position:absolute; top:6px; left:6px;
+  font-size:11px; padding:2px 6px; border-radius:999px; background:#f3f4f6; color:#111827;
+  border:0; cursor:pointer;
+}
+.pick-card .chip-del:hover{ background:#e5e7eb; }
+
+/* 후보 목록(기존 .pick 버튼들) 이미지가 한글경로여서 encode 필요 – JS에서 해결) */
+
+/* 모달 하단 버튼을 가로로 꽉 */
+.modal-actions.fill{ display:flex; gap:10px; margin-top:14px; }
+.modal-actions.fill .btn{ flex:1; height:44px; font-weight:600; }
+
+/* 헤더: 가운데 제목, 우측 닫기 */
+.modal-head{
+  display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px;
+}
+.modal-head h3{ grid-column:2; text-align:center; margin:0; }
+.modal-head .icon-btn{
+  grid-column:3; justify-self:end; background:transparent; border:0; font-size:20px; line-height:1;
+  cursor:pointer;
+}
+
+
+
+
+
+
 
 
 

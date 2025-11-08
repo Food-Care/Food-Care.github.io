@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>내 알레르기 정보</title>
+  <link rel="stylesheet" href="./style.css"/>
+</head>
+<body class="page-allergy">
+    <div class="topbar">
+      <!-- 1) 로고 사진 크기 고정 -->
+      <a href="./index.html" class="brand-link">
+        <img class="brand-img" src="./assets/logo/Allego.png" alt="Allego 로고" />
+      </a>
+
+      <nav class="topnav">
+        <a href="./pages/landing.html" class="link">회사소개</a>
+        <button id="loginBtn" class="btn-login">로그인</button>
+      </nav>
+    </div>
+
+
+  <main class="container">
+    <h1 class="h-center">알레르기가 있는 식품을<br/>선택해주세요</h1>
+
+    <!-- 선택 섹션 (그룹별) -->
+    <section class="allergy-groups">
+
+    <div class="group">
+        <h2 class="group-title">견과류</h2>
+        <div class="row">
+        <button class="pick" data-code="peanut" data-label="땅콩"><img src="./assets/allergy/땅콩.png" alt="땅콩"><span>땅콩</span></button>
+        <button class="pick" data-code="walnut" data-label="호두"><img src="./assets/allergy/호두.png" alt="호두"><span>호두</span></button>
+        <button class="pick" data-code="nut-pine" data-label="잣"><img src="./assets/allergy/잣.png" alt="잣"><span>잣</span></button>
+        </div>
+    </div>
+
+    <div class="group">
+        <h2 class="group-title">해산물</h2>
+        <div class="row">
+        <button class="pick" data-code="shrimp" data-label="새우"><img src="./assets/allergy/새우.png" alt="새우"><span>새우</span></button>
+        <button class="pick" data-code="mackerel" data-label="고등어"><img src="./assets/allergy/고등어.png" alt="고등어"><span>고등어</span></button>
+        <button class="pick" data-code="crab" data-label="게"><img src="./assets/allergy/게.png" alt="게"><span>게</span></button>
+        <button class="pick" data-code="squid" data-label="오징어"><img src="./assets/allergy/오징어.png" alt="오징어"><span>오징어</span></button>
+        <button class="pick" data-code="shellfish" data-label="조개류"><img src="./assets/allergy/조개류.png" alt="조개류"><span>조개류</span></button>
+        </div>
+    </div>
+
+    <div class="group">
+        <h2 class="group-title">유제품</h2>
+        <div class="row">
+        <button class="pick" data-code="milk" data-label="우유"><img src="./assets/allergy/우유.png" alt="우유"><span>우유</span></button>
+        <button class="pick" data-code="egg" data-label="알류(계란)"><img src="./assets/allergy/알류계란.png" alt="알류(계란)"><span>알류(계란)</span></button>
+        </div>
+    </div>
+
+    <div class="group">
+        <h2 class="group-title">곡물 · 콩류</h2>
+        <div class="row">
+        <button class="pick" data-code="wheat" data-label="밀"><img src="./assets/allergy/밀.png" alt="밀"><span>밀</span></button>
+        <button class="pick" data-code="barley" data-label="보리"><img src="./assets/allergy/보리.png" alt="보리"><span>보리</span></button>
+        <button class="pick" data-code="buckwheat" data-label="메밀"><img src="./assets/allergy/메밀.png" alt="메밀"><span>메밀</span></button>
+        <button class="pick" data-code="soybean" data-label="대두"><img src="./assets/allergy/대두.png" alt="대두"><span>대두</span></button>
+        </div>
+    </div>
+
+    <div class="group">
+        <h2 class="group-title">과일 · 채소</h2>
+        <div class="row">
+        <button class="pick" data-code="peach" data-label="복숭아"><img src="./assets/allergy/복숭아.png" alt="복숭아"><span>복숭아</span></button>
+        <button class="pick" data-code="tomato" data-label="토마토"><img src="./assets/allergy/토마토.png" alt="토마토"><span>토마토</span></button>
+        </div>
+    </div>
+
+    <div class="group">
+        <h2 class="group-title">기타</h2>
+        <div class="row">
+        <button class="pick" data-code="beef" data-label="쇠고기"><img src="./assets/allergy/쇠고기.png" alt="쇠고기"><span>쇠고기</span></button>
+        <button class="pick" data-code="pork" data-label="돼지고기"><img src="./assets/allergy/돼지고기.png" alt="돼지고기"><span>돼지고기</span></button>
+        <button class="pick" data-code="alcohols" data-label="아황산류"><img src="./assets/allergy/아황산류.png" alt="아황산류"><span>아황산류</span></button>
+        <button class="pick" data-code="chicken" data-label="닭고기"><img src="./assets/allergy/닭고기.png" alt="닭고기"><span>닭고기</span></button>
+        </div>
+    </div>
+
+    </section>
+
+
+    <!-- 하단 버튼 -->
+    <div class="actions">
+      <button id="btnNext" class="btn btn-primary" disabled>다음</button>
+    </div>
+  </main>
+
+    <!-- (3) 심각도 모달 -->
+    <dialog id="severityDlg" class="modal">
+    <form method="dialog" class="modal-card sev-card">
+        <h3>알레르기 반응이 심한 편인가요?</h3>
+        <p class="subtext">선택한 항목은 음식 검색 시<br><span style="font-weight: bold;">위험 · 주의</span>의 수준이 각기 표시돼요.</p>
+
+        <div class="radio-list">
+        <label class="option danger">
+            <input type="radio" name="sev" value="danger">
+            <div class="opt-body"><b>위험</b><span>알레르기 반응이 심해서 검색 결과에서 제외하고 싶어요</span></div>
+        </label>
+
+        <label class="option caution">
+            <input type="radio" name="sev" value="caution">
+            <div class="opt-body"><b>주의</b><span>반응이 심하지 않고, 검색 결과에 주의 표시만 원해요</span></div>
+        </label>
+        </div>
+
+        <div class="modal-actions fill">
+        <button value="cancel" class="btn btn-ghost">취소</button>
+        <button id="sevOk" value="ok" class="btn btn-primary">확인</button>
+        </div>
+    </form>
+    </dialog>
+
+
+  <!-- (4) 완료 모달 -->
+  <dialog id="doneDlg" class="modal">
+    <form method="dialog" class="modal-card center">
+      <h2>알레르기 설정 완료!</h2>
+      <p class="mute">이제 안심하고 검색하세요</p>
+      <div class="emoji">🥳</div>
+      <div class="modal-actions">
+        <a href="./index.html" class="btn btn-primary">다음</a>
+      </div>
+    </form>
+  </dialog>
+
+<script src="./allergy-store.js"></script>
+<script>
+(function(){
+  // 한글 파일명 안전 인코딩
+  document.querySelectorAll('.pick img').forEach(img=>{
+    const raw = img.getAttribute('src'); if (raw) img.setAttribute('src', encodeURI(raw));
+  });
+
+  const dlgSev  = document.getElementById('severityDlg');
+  const btnOk   = document.getElementById('sevOk');
+  const btnNext = document.getElementById('btnNext');
+
+  let pendingBtn = null; // 방금 클릭한 타일 버튼
+
+  // 저장값 복원
+  function restore(){
+    const s = AllergyStore.load();
+    document.querySelectorAll('.pick').forEach(b=>{
+      const code = b.dataset.code;
+      const found = (s.items||[]).find(x=>x.code===code);
+      b.classList.toggle('is-picked', !!found);
+      if (found){
+        b.dataset.sev = found.severity || 'danger';
+        ensureDot(b);
+      }else{
+        b.removeAttribute('data-sev');
+        const dot = b.querySelector('.sev-dot'); dot && dot.remove();
+      }
+    });
+    btnNext.disabled = !(s.items && s.items.length);
+  }
+
+  // dot 보장
+  function ensureDot(el){
+    if (!el.querySelector('.sev-dot')){
+      const d = document.createElement('span');
+      d.className = 'sev-dot';
+      el.appendChild(d);
+    }
+  }
+
+  // 타일 클릭 → 심각도 모달
+  document.querySelectorAll('.pick').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      pendingBtn = b;
+      // 이미 선택된 항목이면 현재 세팅으로 기본값 체크
+      const sev = b.dataset.sev || 'danger';
+      dlgSev.querySelector(`input[name="sev"][value="${sev}"]`).checked = true;
+      dlgSev.showModal();
+    });
+  });
+
+  // 모달 확인 → 저장/표시
+  btnOk.addEventListener('click', (e)=>{
+    e.preventDefault();
+    if (!pendingBtn) return;
+    const sev = dlgSev.querySelector('input[name="sev"]:checked')?.value || 'danger';
+    const code = pendingBtn.dataset.code;
+    const label = pendingBtn.dataset.label;
+
+    AllergyStore.upsert({ code, label, severity: sev });
+
+    pendingBtn.classList.add('is-picked');
+    pendingBtn.dataset.sev = sev;
+    ensureDot(pendingBtn);
+
+    dlgSev.close('ok');
+    pendingBtn = null;
+    restore(); // 버튼 활성 등 갱신
+  });
+
+  // 완료 → 결과 모달
+  document.getElementById('btnNext').addEventListener('click', ()=>{
+    document.getElementById('doneDlg').showModal();
+  });
+
+  // 초기 복원
+  restore();
+})();
+</script>
+  <footer class="landing-footer">
+    <small>© 2025 Allego. All rights reserved.</small>
+    <p class="credit">
+      Image by <a href="https://www.freepik.com/author/pch-vector" target="_blank" rel="noopener">pch.vector</a>
+      on <a href="https://www.freepik.com" target="_blank" rel="noopener">Freepik</a>
+    </p>
+  </footer>
+</body>
+</html>

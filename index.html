@@ -12,7 +12,7 @@
   <header class="hero hero--landing">
     <div class="topbar">
       <!-- 1) 로고 사진 크기 고정 -->
-      <a href="./pages/search.html" class="brand-link">
+      <a href="./index.html" class="brand-link">
         <img class="brand-img" src="./assets/logo/Allego.png" alt="Allego 로고" />
       </a>
 
@@ -35,11 +35,12 @@
         </div>
       </form>
 
-      <!-- 안내 배지 -->
-      <button class="helper-pill" type="button" onclick="document.getElementById('q').focus()">
-        안전한 식품 검색을 위해 알레르기 정보를 알려주세요
+      <!-- 안내 배지 (동적) -->
+      <button id="allergyEntry" class="helper-pill" type="button">
+        <span class="pill-text">안전한 식품 검색을 위해 알레르기 정보를 알려주세요</span>
         <span class="chev">›</span>
       </button>
+
 
       <!-- 2) 카테고리 2행 × 5열 타일 -->
       <div class="quick-cats" aria-label="빠른 카테고리">
@@ -49,20 +50,17 @@
         <button class="cat-tile" data-cat="라면·면류">
           <img src="./assets/search/라면_면류.png" alt="" /><span>라면 · 면류</span>
         </button>
-        <button class="cat-tile" data-cat="과자·초콜릿">
-          <img src="./assets/search/과자_초콜릿.png" alt="" /><span>과자 · 초콜릿</span>
-        </button>
-        <button class="cat-tile" data-cat="빵·디저트">
-          <img src="./assets/search/빵_디저트.png" alt="" /><span>빵 · 디저트</span>
+        <button class="cat-tile" data-cat="빵·간식류">
+          <img src="./assets/search/빵_디저트.png" alt="" /><span>빵 · 간식류</span>
         </button>
         <button class="cat-tile" data-cat="유제품">
           <img src="./assets/search/유제품.png" alt="" /><span>유제품</span>
         </button>
-        <button class="cat-tile" data-cat="음료">
-          <img src="./assets/search/음료.png" alt="" /><span>음료</span>
+        <button class="cat-tile" data-cat="음료·주류">
+          <img src="./assets/search/음료.png" alt="" /><span>음료 · 주류</span>
         </button>
-        <button class="cat-tile" data-cat="견과류">
-          <img src="./assets/search/견과류.png" alt="" /><span>견과류</span>
+        <button class="cat-tile" data-cat="농수산품">
+          <img src="./assets/search/견과류.png" alt="" /><span>농수산품</span>
         </button>
         <button class="cat-tile" data-cat="소스·양념">
           <img src="./assets/search/소스_양념.png" alt="" /><span>소스 · 양념</span>
@@ -70,8 +68,11 @@
         <button class="cat-tile" data-cat="가공육">
           <img src="./assets/search/가공육.png" alt="" /><span>가공육</span>
         </button>
-        <button class="cat-tile" data-cat="통조림">
-          <img src="./assets/search/통조림.png" alt="" /><span>통조림</span>
+        <button class="cat-tile" data-cat="절임류">
+          <img src="./assets/search/통조림.png" alt="" /><span>절임류</span>
+        </button>
+        <button class="cat-tile" data-cat="기타">
+          <img src="./assets/search/기타.png" alt="" /><span>기타</span>
         </button>
       </div>
     </div>
@@ -97,36 +98,193 @@
     </main>
 
 
+    <!-- 6) 내 알레르기 정보 팝업 -->
+    <!-- 기존 manageDlg 그대로, header 안은 유지 -->
+    <dialog id="manageDlg" class="modal wide">
+      <form method="dialog" class="modal-card">
+        <header class="modal-head">
+          <h3>내 알레르기 정보</h3>
+          <button value="cancel" class="icon-btn" aria-label="닫기">✕</button>
+        </header>
+
+        <section>
+          <!-- ✅ 상단: 선택된 알레르기 카드 영역 -->
+          <div id="pickedWrap" class="picked-wrap"></div>
+
+          <h4 class="mt">추가하시겠어요?</h4>
+
+          <!-- 간단히 일부만 제공(필요시 확장) -->
+          <div class="group">
+              <h2 class="group-title">견과류</h2>
+              <div class="row">
+              <button class="pick" data-code="peanut" data-label="땅콩"><img src="./assets/allergy/땅콩.png" alt="땅콩"><span>땅콩</span></button>
+              <button class="pick" data-code="walnut" data-label="호두"><img src="./assets/allergy/호두.png" alt="호두"><span>호두</span></button>
+              <button class="pick" data-code="nut-pine" data-label="잣"><img src="./assets/allergy/잣.png" alt="잣"><span>잣</span></button>
+              </div>
+          </div>
+
+          <div class="group">
+              <h2 class="group-title">해산물</h2>
+              <div class="row">
+              <button class="pick" data-code="shrimp" data-label="새우"><img src="./assets/allergy/새우.png" alt="새우"><span>새우</span></button>
+              <button class="pick" data-code="mackerel" data-label="고등어"><img src="./assets/allergy/고등어.png" alt="고등어"><span>고등어</span></button>
+              <button class="pick" data-code="crab" data-label="게"><img src="./assets/allergy/게.png" alt="게"><span>게</span></button>
+              <button class="pick" data-code="squid" data-label="오징어"><img src="./assets/allergy/오징어.png" alt="오징어"><span>오징어</span></button>
+              <button class="pick" data-code="shellfish" data-label="조개류"><img src="./assets/allergy/조개류.png" alt="조개류"><span>조개류</span></button>
+              </div>
+          </div>
+
+          <div class="group">
+              <h2 class="group-title">유제품</h2>
+              <div class="row">
+              <button class="pick" data-code="milk" data-label="우유"><img src="./assets/allergy/우유.png" alt="우유"><span>우유</span></button>
+              <button class="pick" data-code="egg" data-label="알류(계란)"><img src="./assets/allergy/알류계란.png" alt="알류(계란)"><span>알류(계란)</span></button>
+              </div>
+          </div>
+
+          <div class="group">
+              <h2 class="group-title">곡물 · 콩류</h2>
+              <div class="row">
+              <button class="pick" data-code="wheat" data-label="밀"><img src="./assets/allergy/밀.png" alt="밀"><span>밀</span></button>
+              <button class="pick" data-code="barley" data-label="보리"><img src="./assets/allergy/보리.png" alt="보리"><span>보리</span></button>
+              <button class="pick" data-code="buckwheat" data-label="메밀"><img src="./assets/allergy/메밀.png" alt="메밀"><span>메밀</span></button>
+              <button class="pick" data-code="soybean" data-label="대두"><img src="./assets/allergy/대두.png" alt="대두"><span>대두</span></button>
+              </div>
+          </div>
+
+          <div class="group">
+              <h2 class="group-title">과일 · 채소</h2>
+              <div class="row">
+              <button class="pick" data-code="peach" data-label="복숭아"><img src="./assets/allergy/복숭아.png" alt="복숭아"><span>복숭아</span></button>
+              <button class="pick" data-code="tomato" data-label="토마토"><img src="./assets/allergy/토마토.png" alt="토마토"><span>토마토</span></button>
+              </div>
+          </div>
+
+          <div class="group">
+              <h2 class="group-title">기타</h2>
+              <div class="row">
+              <button class="pick" data-code="beef" data-label="쇠고기"><img src="./assets/allergy/쇠고기.png" alt="쇠고기"><span>쇠고기</span></button>
+              <button class="pick" data-code="pork" data-label="돼지고기"><img src="./assets/allergy/돼지고기.png" alt="돼지고기"><span>돼지고기</span></button>
+              <button class="pick" data-code="alcohols" data-label="아황산류"><img src="./assets/allergy/아황산류.png" alt="아황산류"><span>아황산류</span></button>
+              <button class="pick" data-code="chicken" data-label="닭고기"><img src="./assets/allergy/닭고기.png" alt="닭고기"><span>닭고기</span></button>
+              </div>
+          </div>
+
+        <footer class="modal-actions fill">
+          <button value="cancel" class="btn btn-ghost">취소</button>
+          <button id="manageDone" value="ok" class="btn btn-primary">확인</button>
+        </footer>
+      </form>
+    </dialog>
+
+        <!-- (3) 심각도 모달 -->
+    <dialog id="severityDlg" class="modal">
+    <form method="dialog" class="modal-card sev-card">
+        <h3>알레르기 반응이 심한 편인가요?</h3>
+        <p class="subtext">선택한 항목은 음식 검색 시<br><span style="font-weight: bold;">위험 · 주의</span>의 수준이 각기 표시돼요.</p>
+
+        <div class="radio-list">
+        <label class="option danger">
+            <input type="radio" name="sev" value="danger">
+            <div class="opt-body"><b>위험</b><span>알레르기 반응이 심해서 검색 결과에서 제외하고 싶어요</span></div>
+        </label>
+
+        <label class="option caution">
+            <input type="radio" name="sev" value="caution">
+            <div class="opt-body"><b>주의</b><span>반응이 심하지 않고, 검색 결과에 주의 표시만 원해요</span></div>
+        </label>
+        </div>
+
+        <div class="modal-actions fill">
+        <button value="cancel" class="btn btn-ghost">취소</button>
+        <button id="sevOk" value="ok" class="btn btn-primary">확인</button>
+        </div>
+    </form>
+    </dialog>
+
+    <!-- 7) 삭제 확인 -->
+    <dialog id="confirmDlg" class="modal">
+      <form method="dialog" class="modal-card center">
+        <h3>정말 삭제하시겠어요?</h3>
+        <div class="modal-actions">
+          <button value="cancel" class="btn">아니요</button>
+          <button id="confirmYes" value="ok" class="btn btn-primary">네</button>
+        </div>
+      </form>
+    </dialog>
+
+
+
 
   <script src="./app.js" defer></script>
 
 <script>
-/* 랜딩 해제 + 카테고리 바 접기 */
+/* 전역 플래그: 카테고리 타일을 클릭했는지 여부 */
+window.categorySelected = window.categorySelected || false;
+
+/* 랜딩 해제 + 카테고리 바 접기(1행 모드) */
 function exitLanding(){
   document.body.classList.remove('mode-landing');
   const quick = document.querySelector('.quick-cats');
   if (quick){
     quick.classList.add('is-compact');
+    ensureAllTile(quick);      // ✅ 1행 모드에서만 ALL 버튼 생성
     attachQuickCatsNav(quick); // 좌/우 버튼 생성+동작
   }
 }
 
+/* 1행 모드일 때만 ALL 버튼을 선두에 보장 */
+function ensureAllTile(quick){
+  if (!quick || !quick.classList.contains('is-compact')) return;
+
+  // 이미 있으면 스킵
+  if (quick.querySelector('.cat-tile.cat-all[data-cat="all"]')) return;
+
+  const allBtn = document.createElement('button');
+  allBtn.className = 'cat-tile cat-all';
+  allBtn.dataset.cat = 'all';
+  allBtn.innerHTML = `<span>ALL</span>`;
+  allBtn.addEventListener('click', () => {
+    // ALL 선택 시: 카테고리 선택 여부 false로 초기화하고 전체 검색 상태
+    window.categorySelected = false;
+    activateTile('all');
+    // 검색창 값 유지한 채 전체로 apply (검색어 없으면 미리보기 6개)
+    window.currentCat = 'all';
+    typeof window.apply === 'function' && window.apply();
+    document.getElementById('list')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  quick.prepend(allBtn);
+}
+
+/* 좌/우 내비게이션 부착 */
 function attachQuickCatsNav(quick){
   if (!quick || !quick.classList.contains('is-compact')) return;
 
-  // ① 래퍼가 없으면 자동 생성해서 quick-cats를 감쌈
+  // 네비 버튼 폭(아이콘+여백)
+  const NAV_W = 40; // px
+
+  // ① 래퍼가 없으면 생성
   let wrap = quick.parentElement;
   if (!wrap || !wrap.classList.contains('quick-cats-wrap')){
     wrap = document.createElement('div');
     wrap.className = 'quick-cats-wrap';
     quick.replaceWith(wrap);
     wrap.appendChild(quick);
-    // 버튼용 패딩은 래퍼가 담당 → 트랙은 패딩 제거(있다면)
-    quick.style.paddingLeft = '0';
-    quick.style.paddingRight = '0';
   }
 
-  // ② 좌/우 버튼(래퍼에 붙임, 스크롤은 quick만)
+  // ② 래퍼 패딩으로 버튼 자리 확보 (트랙은 패딩 0)
+  wrap.style.position = 'relative';
+  wrap.style.paddingLeft  = NAV_W + 'px';
+  wrap.style.paddingRight = NAV_W + 'px';
+  quick.style.paddingLeft  = '0';
+  quick.style.paddingRight = '0';
+
+  // ③ 끝 타일까지 보이게 스크롤 패딩 지정
+  quick.style.scrollPaddingLeft  = NAV_W + 'px';
+  quick.style.scrollPaddingRight = NAV_W + 'px';
+
+  // ④ 좌/우 버튼
   let prev = wrap.querySelector('.cats-prev');
   let next = wrap.querySelector('.cats-next');
   if (!prev || !next){
@@ -142,16 +300,31 @@ function attachQuickCatsNav(quick){
     wrap.append(prev, next);
   }
 
-  // ③ 이동/상태 로직
-  const step = () => Math.max(160, Math.round(wrap.clientWidth * 0.8)); // 래퍼 기준
+  // ⑤ 버튼 배치 (래퍼 안쪽으로 겹치게)
+  Object.assign(prev.style, {
+    position:'absolute', left:'0', width: NAV_W+'px',
+    zIndex:'2'
+  });
+  Object.assign(next.style, {
+    position:'absolute', right:'0', width: NAV_W+'px',
+    zIndex:'2'
+  });
+
+  // ⑥ 스크롤/내비 로직
+  const step = () => Math.max(160, Math.round(wrap.clientWidth * 0.8));
   const clamp = v => Math.min(Math.max(v, 0), Math.max(0, quick.scrollWidth - quick.clientWidth));
   const scrollByClamped = dx => quick.scrollTo({ left: clamp(quick.scrollLeft + dx), behavior: 'smooth' });
 
   prev.onclick = () => scrollByClamped(-step());
   next.onclick = () => scrollByClamped(+step());
 
-  // 휠로도 가로 스크롤
-  quick.addEventListener('wheel', (e)=>{ if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){ quick.scrollLeft += e.deltaY; e.preventDefault(); }},{passive:false});
+  // 마우스 휠로도 가로 스크롤
+  quick.addEventListener('wheel', (e)=>{
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      quick.scrollLeft += e.deltaY;
+      e.preventDefault();
+    }
+  }, {passive:false});
 
   function updateNav(){
     const overflow = quick.scrollWidth > quick.clientWidth + 1;
@@ -167,14 +340,13 @@ function attachQuickCatsNav(quick){
   updateNav();
 }
 
+
 /* (호출 호환용) 기존 이름 유지 */
 function updateEdgeState(quick){
-  // 새 로직으로 위임
   if (quick) {
     const prev = quick.querySelector('.cats-prev');
     const next = quick.querySelector('.cats-next');
     if (!prev || !next) return;
-    // attachQuickCatsNav 안의 updateNav와 동일 계산
     const overflow = quick.scrollWidth > quick.clientWidth + 1;
     const atStart  = quick.scrollLeft <= 1;
     const atEnd    = quick.scrollLeft + quick.clientWidth >= quick.scrollWidth - 1;
@@ -184,50 +356,179 @@ function updateEdgeState(quick){
   }
 }
 
+/* 타일 활성 표시 공통 */
+function activateTile(catKey){
+  const quick = document.querySelector('.quick-cats');
+  if (!quick) return;
+  const tiles = Array.from(quick.querySelectorAll('.cat-tile'));
+  tiles.forEach(b => b.classList.remove('active'));
 
-/* 카테고리 선택: 검색 상태 적용 + 활성 표시 */
+  // 공백 제거 후 비교
+  const findBy = (el) => (el.dataset.cat || '').replace(/\s/g,'') === (catKey || '').replace(/\s/g,'');
+  const target =
+    (catKey === 'all')
+      ? quick.querySelector('.cat-tile.cat-all[data-cat="all"]')
+      : tiles.find(findBy);
+
+  if (target){
+    target.classList.add('active');
+    target.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+  }
+}
+
+/* 카테고리 선택: 1행 전환 + 검색어 초기화 + 즉시 결과는 "비움"(app.js가 처리) */
 function selectCategory(cat) {
   exitLanding();
-
+  window.categorySelected = true;                 // ✅ 카테고리 선택됨
   const $q = document.getElementById('q');
-  if ($q) $q.value = '';
+  if ($q) $q.value = '';                         // 규칙상 선택 직후엔 검색어 없음
 
-  // 결과 갱신
+  // 현재 카테고리 상태 갱신
   window.currentCat = (typeof normCat === 'function') ? normCat(cat) : cat;
-  if (typeof window.apply === 'function') window.apply();
+  activateTile(cat);
 
-  // 타일 활성 & 중앙 보이기
-  const quick = document.querySelector('.quick-cats');
-  if (quick){
-    const tiles = Array.from(quick.querySelectorAll('.cat-tile'));
-    tiles.forEach(b => b.classList.remove('active'));
-    const tile = tiles.find(b => (b.dataset.cat || '').replace(/\s/g,'') === (cat || '').replace(/\s/g,''));
-    if (tile){
-      tile.classList.add('active');
-      tile.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
-    }
-    attachQuickCatsNav(quick);
-  }
+  // 결과 갱신: 검색어가 비어있으므로 app.js에서 "결과 0개"로 보이게 됨
+  if (typeof window.apply === 'function') window.apply();
 
   document.getElementById('list')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 /* 초기 바인딩 */
 document.addEventListener('DOMContentLoaded', () => {
-  // 카테고리 클릭
+  // 2행 타일 클릭 → selectCategory
   document.querySelectorAll('.cat-tile[data-cat]').forEach(btn => {
     btn.addEventListener('click', () => selectCategory(btn.dataset.cat || 'all'));
   });
 
-  // 검색 아이콘/엔터 → 랜딩 해제만 (실제 검색 로직은 app.js의 apply가 담당)
-  const form = document.querySelector('.searchbar');
-  form?.addEventListener('submit', (e) => { e.preventDefault(); exitLanding(); });
+  // 검색 submit → 1행 전환 + ALL 또는 현재 선택 카테고리 규칙 적용
+  const form = document.getElementById('searchForm');
+  const input = document.getElementById('q');
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const qVal = (input?.value || '').trim();
+
+    if (!qVal) {
+      // 검색어가 없으면: 랜딩 유지(=2행 유지), 아무 변화 없음
+      return;
+    }
+
+    // 검색어가 있을 때는 반드시 1행 전환
+    exitLanding();
+
+    // 카테고리 미선택 상태라면 → ALL 선택 후 전체 검색
+    if (!window.categorySelected) {
+      ensureAllTile(document.querySelector('.quick-cats'));
+      activateTile('all');
+      window.currentCat = 'all';
+    } else {
+      // 이미 카테고리 선택됨 → 그 카테고리 유지
+      activateTile(window.currentCat || 'all');
+    }
+
+    // app.js의 apply가 q + currentCat 상태로 결과 그려줌
+    if (typeof window.apply === 'function') window.apply();
+
+    document.getElementById('list')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 
   // 혹시 처음부터 compact로 시작한다면 버튼 상태 맞추기
   const quick = document.querySelector('.quick-cats');
-  if (quick?.classList.contains('is-compact')) attachQuickCatsNav(quick);
+  if (quick?.classList.contains('is-compact')) {
+    ensureAllTile(quick);
+    attachQuickCatsNav(quick);
+  }
 });
 </script>
+
+
+<script src="./allergy-store.js"></script>
+
+<script>
+(function(){
+  const entry = document.getElementById('allergyEntry');
+  const pillText = entry?.querySelector('.pill-text');
+  const manageDlg = document.getElementById('manageDlg');
+  const confirmDlg = document.getElementById('confirmDlg');
+  const pickedWrap = document.getElementById('pickedWrap');
+  let toDelete = null;
+
+  function refreshPill(){
+    const s = AllergyStore.load();
+    if (s.items.length){
+      pillText.textContent = `${s.items.map(x=>x.label).slice(0,2).join(', ')} 등의 성분이 검색에서 제외/주의돼요`;
+      entry.classList.add('has-data');
+    }else{
+      pillText.textContent = '안전한 식품 검색을 위해 알레르기 정보를 알려주세요';
+      entry.classList.remove('has-data');
+    }
+  }
+
+  function renderPicked(){
+    const s = AllergyStore.load();
+    pickedWrap.innerHTML = '';
+    if (!s.items.length){
+      pickedWrap.innerHTML = '<p class="mute">선택한 알레르기가 없어요.</p>';
+      return;
+    }
+    s.items.forEach(item=>{
+      const chip = document.createElement('div');
+      chip.className = 'picked';
+      chip.innerHTML = `
+        <span class="dot ${item.severity}"></span>
+        <span class="label">${item.label}</span>
+        <button class="del" aria-label="삭제" data-code="${item.code}">삭제</button>
+      `;
+      pickedWrap.appendChild(chip);
+    });
+  }
+
+  // 배지 클릭: 데이터 있으면 팝업, 없으면 설정 페이지로 이동
+  entry?.addEventListener('click', ()=>{
+    if (AllergyStore.hasData()){
+      renderPicked();
+      manageDlg.showModal();
+    } else {
+      location.href = './allergy.html';
+    }
+  });
+
+  // 팝업 내: 새 항목 추가(기본 ‘위험’으로 열고 선택)
+  manageDlg?.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.pick');
+    if (!btn) return;
+    // 간단: 즉시 위험으로 저장(필요하면 severity 선택 다이얼로그 재사용 가능)
+    AllergyStore.upsert({ code: btn.dataset.code, label: btn.dataset.label, severity:'danger' });
+    renderPicked(); refreshPill();
+  });
+
+  // 삭제 요청 → 확인 다이얼로그
+  pickedWrap?.addEventListener('click', (e)=>{
+    const del = e.target.closest('button.del');
+    if (!del) return;
+    toDelete = del.dataset.code;
+    confirmDlg.showModal();
+  });
+  document.getElementById('confirmYes')?.addEventListener('click', ()=>{
+    if (toDelete){ AllergyStore.remove(toDelete); toDelete = null; }
+    confirmDlg.close('ok');
+    renderPicked(); refreshPill();
+  });
+
+  // Export / Import
+  document.getElementById('btnExport')?.addEventListener('click', ()=> AllergyStore.exportFile());
+  document.getElementById('fileImport')?.addEventListener('change', async (e)=>{
+    const file = e.target.files?.[0]; if (!file) return;
+    await AllergyStore.importFile(file);
+    renderPicked(); refreshPill();
+    e.target.value = '';
+  });
+
+  document.addEventListener('DOMContentLoaded', refreshPill);
+  refreshPill();
+})();
+</script>
+
+
 
 
 

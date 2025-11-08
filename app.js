@@ -1,30 +1,16 @@
-console.log("build=2025-10-09-02: clean");
+console.log("build=2025-10-09-03: fix search logic & remove 6-preview");
 
 // ✅ 한 곳에서 API 주소 관리
 const API_BASE = location.hostname.includes('localhost')
   ? ''
   : 'https://food-care-github-io.onrender.com';
 
-// ✅ 초기 6개 미리보기
-const INITIAL_LIMIT = 6;
-
 // ===== DOM =====
-const $q         = document.getElementById('q');
-const $searchBtn = document.getElementById('searchBtn');
-const $searchForm= document.getElementById('searchForm'); // ✅ 추가
-const $cats      = document.getElementById('cats');
-const $count     = document.getElementById('count');
-const $sort      = document.getElementById('sort');
-const $list      = document.getElementById('list');
-const $empty     = document.getElementById('empty');
-
-// ===== 상수 =====
-const PLACEHOLDER =
-  "data:image/svg+xml;utf8," +
-  encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'>
-    <rect width='100%' height='100%' fill='#e9ece6'/>
-    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#9aa59b' font-size='16'>이미지 로딩 중…</text>
-  </svg>`);
+const $q     = document.getElementById('q');
+const $count = document.getElementById('count');
+const $sort  = document.getElementById('sort');
+const $list  = document.getElementById('list');
+const $empty = document.getElementById('empty');
 
 // ===== 상태 =====
 const imageCache = new Map();
@@ -32,15 +18,36 @@ let RAW = [];
 let DATA = [];
 let results = [];
 
-// 🔁 전역 단일 상태(다른 스크립트와 공유)
 window.currentCat = window.currentCat || 'all';
+window.categorySelected = window.categorySelected || false;
 
-// 칩 이모지(필요 시 확장)
-const CAT_ICONS = new Map(Object.entries({
-  "어묵": "🍢", "조미김": "🟩", "숙면": "🍜", "효소식품": "🧪", "조미액젓": "🧂",
-  "두류가공품": "🌱", "탁주": "🍶", "복합조미식품": "🧂", "약주": "🍶",
-  "소스": "🥫", "절임식품": "🥒", "발효식초": "🍾", "과실주": "🍷"
-}));
+// ===== 카테고리 정규화 및 매핑 =====
+function canonCat(s=''){
+  return String(s)
+    .trim()
+    .replace(/,/g, '·')
+    .replace(/\s*·\s*/g, '·')
+    .replace(/·{2,}/g, '·')
+    .replace(/\s+/g, '');
+}
+
+function mapCategory(raw){
+  const key = canonCat(raw || '');
+  const table = {
+    '가공육': '가공육',
+    '간편식': '간편식',
+    '기타': '기타',
+    '농수산가공품': '농수산품',
+    '라면·면류': '라면 · 면류',
+    '빵·간식류': '빵 · 간식류',
+    '소스·양념·기름류': '소스 · 양념',
+    '유제품': '유제품',
+    '음료·주류': '음료 · 주류',
+    '절임류': '절임류',
+  };
+  // 쉼표 → 가운데점 버전도 매칭
+  return table[key] || table[key.replace(/,/g,'·')] || '기타';
+}
 
 // ===== 초기화 =====
 init();
@@ -58,96 +65,61 @@ async function init(){
     DATA = RAW.map(it => ({
       name:  it?.제품명 ?? '',
       brand: it?.회사명 ?? '',
-      cat:   it?.카테고리 ?? '',
+      cat:   mapCategory(it?.대분류카테고리 ?? it?.카테고리 ?? ''),
       ings:  Array.isArray(it?.원재료명) ? it.원재료명 : []
     }));
   }
 
-  if ($cats) buildCategoryChips(DATA);
-
-  apply();              // 최초 렌더
-  window.apply = apply; // 외부(다른 스크립트)에서 호출 가능
+  apply();
+  window.apply = apply; // 외부 접근용
 }
 
-// ===== 칩(카테고리) =====
-function buildCategoryChips(items){
-  if (!$cats) return; // search.html에 없으면 무시
-
-  const cats = Array.from(new Set(items.map(x => x.cat).filter(Boolean)))
-    .sort((a,b)=>a.localeCompare(b,'ko'));
-
-  $cats.innerHTML = '';
-  addChip('all', '전체', '🏠', normCat(window.currentCat) === 'all');
-  cats.forEach(cat => {
-    const key   = normCat(cat);   // ← 비교용 키는 정규화
-    const label = cat;            // ← 화면엔 원문 라벨
-    addChip(key, label, CAT_ICONS.get(cat) || '🧺', normCat(window.currentCat) === key);
-  });
-}
-
-function addChip(key, label, emoji, active){
-  const b = document.createElement('button');
-  b.className = 'chip' + (active ? ' active' : '');
-  b.dataset.key = key;
-  b.innerHTML = `<span class="emoji">${emoji}</span>${escapeHTML(label)}`;
-
-  b.addEventListener('click', () => {
-    document.body.classList.remove('mode-landing'); // 랜딩 모드 해제(있을 경우)
-
-    // 칩 UI 토글
-    $cats && $cats.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
-    b.classList.add('active');
-
-    // 상태 갱신 + 검색어 초기화
-    window.currentCat = key;
-    if ($q) $q.value = '';
-
-    apply();
-
-    // 리스트 위치로 스크롤
-    document.getElementById('list')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-
-  $cats.appendChild(b);
-}
-
-// ===== 적용/렌더 =====
 function apply(){
-  const q = ($q?.value || '').trim().toLowerCase();
-  let res = [...DATA];  // JSON 순서 유지
+  const qRaw = ($q?.value || '').trim();
+  const q = qRaw.toLowerCase();
+  const cat = canonCat(window.currentCat || 'all');
 
-  if (q) res = res.filter(f => (f.name || '').toLowerCase().includes(q));
-  if (normCat(window.currentCat) !== 'all') {
-    res = res.filter(f => normCat(f.cat) === normCat(window.currentCat));
+  let res = [...DATA];
+
+  // 1️⃣ 검색어가 없으면 → 무조건 결과 비움
+  if (!q) {
+    results = [];
+    return render();
   }
 
-  if (q || window.currentCat !== 'all') {
-    switch($sort?.value){
-      case 'brand': res.sort((a,b)=>(a.brand||'').localeCompare(b.brand||'','ko')); break;
-      case 'name':
-      default:      res.sort((a,b)=>(a.name||'').localeCompare(b.name||'','ko'));
-    }
+  // 2️⃣ 검색어가 있을 때: 제품명 또는 회사명 포함 필터
+  res = res.filter(f =>
+    (f.name  || '').toLowerCase().includes(q) ||
+    (f.brand || '').toLowerCase().includes(q)
+  );
+
+  // 3️⃣ 카테고리 필터 (all 제외)
+  if (cat !== 'all') {
+    res = res.filter(f => canonCat(f.cat) === cat);
   }
 
-  // 초기 화면은 6개만
-  if (!q && window.currentCat === 'all') res = res.slice(0, 6);
+  // 4️⃣ 정렬
+  switch($sort?.value){
+    case 'brand': res.sort((a,b)=>(a.brand||'').localeCompare(b.brand||'','ko')); break;
+    default:      res.sort((a,b)=>(a.name||'').localeCompare(b.name||'','ko'));
+  }
 
   results = res;
   render();
 }
 
+
 function render(){
-  if (!$list) return; // 리스트 없는 페이지면 종료
+  if (!$list) return;
   $list.innerHTML = '';
 
   const qText = ($q?.value || '').trim();
-  const isInitial = !qText && window.currentCat === 'all';
-  const toRender = isInitial ? results.slice(0, INITIAL_LIMIT) : results;
+  const catKey = canonCat(window.currentCat || 'all');
+  const toRender = results;
 
   if ($count){
-    $count.textContent = isInitial
-      ? `총 ${results.length}개 상품 • ${INITIAL_LIMIT}개 미리보기`
-      : `총 ${results.length}개 상품` + (qText ? ` • '${qText}' 검색 중` : '');
+    $count.textContent = `총 ${toRender.length}개 상품` +
+      (qText ? ` • '${qText}' 검색 중` : '');
   }
 
   if (!toRender.length){
@@ -159,6 +131,13 @@ function render(){
   toRender.forEach((f, idx) => {
     const id = `card-${idx}`;
     const queryNameOnly = (f.name || '').trim();
+    const PLACEHOLDER =
+      "data:image/svg+xml;utf8," +
+      encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'>
+        <rect width='100%' height='100%' fill='#e9ece6'/>
+        <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle'
+              fill='#9aa59b' font-size='16'>이미지 로딩 중…</text>
+      </svg>`);
 
     const card = document.createElement('div');
     card.className = 'product-card col-span-6';
@@ -195,7 +174,7 @@ function render(){
   });
 }
 
-// ===== 큐/스로틀 & 이미지 로더 =====
+// ===== 이미지 로더 =====
 const _Q = []; let _active = 0;
 function schedule(task){
   return new Promise((resolve, reject)=>{
@@ -211,7 +190,6 @@ function _drain(){
     setTimeout(_drain, 120);
   });
 }
-
 async function loadImageFor(name, brand='', cat=''){
   const key = `${name}@@${brand}@@${cat}`;
   if (imageCache.has(key)) return imageCache.get(key);
@@ -226,83 +204,12 @@ async function loadImageFor(name, brand='', cat=''){
   });
 }
 
-// ===== 유틸 & 이벤트 =====
+// ===== 유틸 =====
 function escapeHTML(s){
   return String(s).replace(/[&<>"']/g, m => ({
     '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
   })[m]);
 }
 
-// 로그인 버튼 등(있을 때만 동작)
-document.addEventListener('DOMContentLoaded', () => {
-  const loginBtn = document.getElementById('loginBtn');
-  if (loginBtn) {
-    loginBtn.addEventListener('click', () => {
-      const toLogin = location.pathname.includes('/pages/')
-        ? './login.html'
-        : './pages/login.html';
-      window.location.href = toLogin;
-    });
-  }
-
-  const btn = document.getElementById('landingBtn');
-  if (btn) {
-    btn.addEventListener('click', () => {
-      window.location.href = './pages/landing.html';
-    });
-  }
-});
-
-// 🔗 null 안전 리스너
-$searchBtn && $searchBtn.addEventListener('click', apply);
-$q && $q.addEventListener('keydown', (e)=>{ if(e.key==='Enter') apply(); });
-$sort && $sort.addEventListener('change', apply);
-
-// ===== 유틸 & 이벤트 =====
-function normCat(s){
-  return String(s || '').replace(/\s*·\s*/g, '·').trim();
-}
-
-// ===== 검색 실행 =====
-function handleSearch() {
-  // 검색 모드로 전환
-  document.body.classList.remove('mode-landing');
-  // 카테고리는 전체로 초기화(검색 우선)
-  window.currentCat = 'all';
-
-  apply(); // 필터/정렬/렌더
-
-  // 결과 영역으로 스크롤
-  document.getElementById('list')?.scrollIntoView({
-    behavior: 'smooth',
-    block: 'start'
-  });
-}
-
-// Enter, 버튼 클릭, 아이콘 클릭, 폼 제출 모두 한곳으로 수렴
-$searchForm && $searchForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  handleSearch();
-});
-
-$searchBtn && $searchBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  handleSearch();
-});
-
-// 아이콘 이미지 직접 클릭해도 동작 (접근성 보완)
-document.querySelector('.search-icon')?.addEventListener('click', (e) => {
-  e.preventDefault();
-  $searchForm?.requestSubmit(); // submit 이벤트 트리거
-});
-
-// 입력창에서 Enter 눌러도 검색
-$q && $q.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    handleSearch();
-  }
-});
-
-// 정렬 변경 시 즉시 반영
+// ===== 정렬 변경 시 즉시 반영 =====
 $sort && $sort.addEventListener('change', apply);
