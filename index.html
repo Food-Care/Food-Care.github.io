@@ -98,119 +98,132 @@
     </main>
 
 
-    <!-- 6) 내 알레르기 정보 팝업 -->
-    <dialog id="manageDlg" class="modal wide">
-      <form method="dialog" class="modal-card">
-        <header class="modal-head">
-          <h3>내 알레르기 정보</h3>
-          <button value="cancel" class="icon-btn" aria-label="닫기">✕</button>
-        </header>
+<!-- 6) 내 알레르기 정보 팝업 -->
+<dialog id="manageDlg" class="modal wide" style="border-radius:10px;">
+  <form method="dialog" class="modal-card">
+    <header class="modal-head">
+      <h3>내 알레르기 정보</h3>
+      <button value="cancel" class="icon-btn" aria-label="닫기" type="button">✕</button>
+    </header>
 
-        <section>
-          <!-- ✅ 상단: 선택된 알레르기 카드 영역 -->
-          <div id="pickedWrap" class="picked-wrap"></div>
-
-          <h4 class="mt">추가하시겠어요?</h4>
-
-          <!-- 간단히 일부만 제공(필요시 확장) -->
-          <div class="group">
-              <h2 class="group-title">견과류</h2>
-              <div class="row">
-              <button class="pick" data-code="peanut" data-label="땅콩"><img src="./assets/allergy/땅콩.png" alt="땅콩"><span>땅콩</span></button>
-              <button class="pick" data-code="walnut" data-label="호두"><img src="./assets/allergy/호두.png" alt="호두"><span>호두</span></button>
-              <button class="pick" data-code="nut-pine" data-label="잣"><img src="./assets/allergy/잣.png" alt="잣"><span>잣</span></button>
-              </div>
+    <section>
+      <!-- 상단: 나의 알레르기 성분 헤더 -->
+      <div class="picked-head" style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;">
+        <div>
+          <div style="font-weight:700; margin-bottom:6px;">나의 알레르기 성분</div>
+          <div style="color:#6b7280; line-height:1.4; font-size:14px;">
+            식품을 눌러 <b>위험, 주의</b> 정도를 수정해보세요
           </div>
-
-          <div class="group">
-              <h2 class="group-title">해산물</h2>
-              <div class="row">
-              <button class="pick" data-code="shrimp" data-label="새우"><img src="./assets/allergy/새우.png" alt="새우"><span>새우</span></button>
-              <button class="pick" data-code="mackerel" data-label="고등어"><img src="./assets/allergy/고등어.png" alt="고등어"><span>고등어</span></button>
-              <button class="pick" data-code="crab" data-label="게"><img src="./assets/allergy/게.png" alt="게"><span>게</span></button>
-              <button class="pick" data-code="squid" data-label="오징어"><img src="./assets/allergy/오징어.png" alt="오징어"><span>오징어</span></button>
-              <button class="pick" data-code="shellfish" data-label="조개류"><img src="./assets/allergy/조개류.png" alt="조개류"><span>조개류</span></button>
-              </div>
-          </div>
-
-          <div class="group">
-              <h2 class="group-title">유제품</h2>
-              <div class="row">
-              <button class="pick" data-code="milk" data-label="우유"><img src="./assets/allergy/우유.png" alt="우유"><span>우유</span></button>
-              <button class="pick" data-code="egg" data-label="알류(계란)"><img src="./assets/allergy/알류계란.png" alt="알류(계란)"><span>알류(계란)</span></button>
-              </div>
-          </div>
-
-          <div class="group">
-              <h2 class="group-title">곡물 · 콩류</h2>
-              <div class="row">
-              <button class="pick" data-code="wheat" data-label="밀"><img src="./assets/allergy/밀.png" alt="밀"><span>밀</span></button>
-              <button class="pick" data-code="barley" data-label="보리"><img src="./assets/allergy/보리.png" alt="보리"><span>보리</span></button>
-              <button class="pick" data-code="buckwheat" data-label="메밀"><img src="./assets/allergy/메밀.png" alt="메밀"><span>메밀</span></button>
-              <button class="pick" data-code="soybean" data-label="대두"><img src="./assets/allergy/대두.png" alt="대두"><span>대두</span></button>
-              </div>
-          </div>
-
-          <div class="group">
-              <h2 class="group-title">과일 · 채소</h2>
-              <div class="row">
-              <button class="pick" data-code="peach" data-label="복숭아"><img src="./assets/allergy/복숭아.png" alt="복숭아"><span>복숭아</span></button>
-              <button class="pick" data-code="tomato" data-label="토마토"><img src="./assets/allergy/토마토.png" alt="토마토"><span>토마토</span></button>
-              </div>
-          </div>
-
-          <div class="group">
-              <h2 class="group-title">기타</h2>
-              <div class="row">
-              <button class="pick" data-code="beef" data-label="쇠고기"><img src="./assets/allergy/쇠고기.png" alt="쇠고기"><span>쇠고기</span></button>
-              <button class="pick" data-code="pork" data-label="돼지고기"><img src="./assets/allergy/돼지고기.png" alt="돼지고기"><span>돼지고기</span></button>
-              <button class="pick" data-code="alcohols" data-label="아황산류"><img src="./assets/allergy/아황산류.png" alt="아황산류"><span>아황산류</span></button>
-              <button class="pick" data-code="chicken" data-label="닭고기"><img src="./assets/allergy/닭고기.png" alt="닭고기"><span>닭고기</span></button>
-              </div>
-          </div>
-
-        <footer class="modal-actions fill">
-          <button value="cancel" class="btn btn-ghost">취소</button>
-          <button id="manageDone" value="ok" class="btn btn-primary">확인</button>
-        </footer>
-      </form>
-    </dialog>
-
-        <!-- (3) 심각도 모달 -->
-    <dialog id="severityDlg" class="modal">
-    <form method="dialog" class="modal-card sev-card">
-        <h3>알레르기 반응이 심한 편인가요?</h3>
-        <p class="subtext">선택한 항목은 음식 검색 시<br><span style="font-weight: bold;">위험 · 주의</span>의 수준이 각기 표시돼요.</p>
-
-        <div class="radio-list">
-        <label class="option danger">
-            <input type="radio" name="sev" value="danger">
-            <div class="opt-body"><b>위험</b><span>알레르기 반응이 심해서 검색 결과에서 제외하고 싶어요</span></div>
-        </label>
-
-        <label class="option caution">
-            <input type="radio" name="sev" value="caution">
-            <div class="opt-body"><b>주의</b><span>반응이 심하지 않고, 검색 결과에 주의 표시만 원해요</span></div>
-        </label>
         </div>
+        <button id="btnDeleteToggle" type="button" style="background:transparent;border:0;color:#6b7280;cursor:pointer;">삭제하기</button>
+      </div>
 
-        <div class="modal-actions fill">
-        <button value="cancel" class="btn btn-ghost">취소</button>
-        <button id="sevOk" value="ok" class="btn btn-primary">확인</button>
-        </div>
-    </form>
-    </dialog>
+      <!-- ✅ 가로 정렬용: flex + wrap -->
+      <div id="pickedWrap" class="picked-wrap" style="display:flex;flex-wrap:wrap;gap:12px;"></div>
 
-    <!-- 7) 삭제 확인 -->
-    <dialog id="confirmDlg" class="modal">
-      <form method="dialog" class="modal-card center">
-        <h3>정말 삭제하시겠어요?</h3>
-        <div class="modal-actions">
-          <button value="cancel" class="btn">아니요</button>
-          <button id="confirmYes" value="ok" class="btn btn-primary">네</button>
+      <h4 class="mt" style="padding-top: 50px;">추가하시겠어요?</h4>
+
+      <!-- 카테고리들 -->
+      <div class="group">
+        <h2 class="group-title">견과류</h2>
+        <div class="row">
+          <button class="pick" type="button" data-code="peanut" data-label="땅콩"><img src="./assets/allergy/땅콩.png" alt="땅콩"><span>땅콩</span></button>
+          <button class="pick" type="button" data-code="walnut" data-label="호두"><img src="./assets/allergy/호두.png" alt="호두"><span>호두</span></button>
+          <button class="pick" type="button" data-code="nut-pine" data-label="잣"><img src="./assets/allergy/잣.png" alt="잣"><span>잣</span></button>
         </div>
-      </form>
-    </dialog>
+      </div>
+
+      <div class="group">
+        <h2 class="group-title">해산물</h2>
+        <div class="row">
+          <button class="pick" type="button" data-code="shrimp" data-label="새우"><img src="./assets/allergy/새우.png" alt="새우"><span>새우</span></button>
+          <button class="pick" type="button" data-code="mackerel" data-label="고등어"><img src="./assets/allergy/고등어.png" alt="고등어"><span>고등어</span></button>
+          <button class="pick" type="button" data-code="crab" data-label="게"><img src="./assets/allergy/게.png" alt="게"><span>게</span></button>
+          <button class="pick" type="button" data-code="squid" data-label="오징어"><img src="./assets/allergy/오징어.png" alt="오징어"><span>오징어</span></button>
+          <button class="pick" type="button" data-code="shellfish" data-label="조개류"><img src="./assets/allergy/조개류.png" alt="조개류"><span>조개류</span></button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2 class="group-title">유제품</h2>
+        <div class="row">
+          <button class="pick" type="button" data-code="milk" data-label="우유"><img src="./assets/allergy/우유.png" alt="우유"><span>우유</span></button>
+          <button class="pick" type="button" data-code="egg" data-label="알류(계란)"><img src="./assets/allergy/알류계란.png" alt="알류(계란)"><span>알류(계란)</span></button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2 class="group-title">곡물 · 콩류</h2>
+        <div class="row">
+          <button class="pick" type="button" data-code="wheat" data-label="밀"><img src="./assets/allergy/밀.png" alt="밀"><span>밀</span></button>
+          <button class="pick" type="button" data-code="barley" data-label="보리"><img src="./assets/allergy/보리.png" alt="보리"><span>보리</span></button>
+          <button class="pick" type="button" data-code="buckwheat" data-label="메밀"><img src="./assets/allergy/메밀.png" alt="메밀"><span>메밀</span></button>
+          <button class="pick" type="button" data-code="soybean" data-label="대두"><img src="./assets/allergy/대두.png" alt="대두"><span>대두</span></button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2 class="group-title">과일 · 채소</h2>
+        <div class="row">
+          <button class="pick" type="button" data-code="peach" data-label="복숭아"><img src="./assets/allergy/복숭아.png" alt="복숭아"><span>복숭아</span></button>
+          <button class="pick" type="button" data-code="tomato" data-label="토마토"><img src="./assets/allergy/토마토.png" alt="토마토"><span>토마토</span></button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2 class="group-title">기타</h2>
+        <div class="row">
+          <button class="pick" type="button" data-code="beef" data-label="쇠고기"><img src="./assets/allergy/쇠고기.png" alt="쇠고기"><span>쇠고기</span></button>
+          <button class="pick" type="button" data-code="pork" data-label="돼지고기"><img src="./assets/allergy/돼지고기.png" alt="돼지고기"><span>돼지고기</span></button>
+          <button class="pick" type="button" data-code="alcohols" data-label="아황산류"><img src="./assets/allergy/아황산류.png" alt="아황산류"><span>아황산류</span></button>
+          <button class="pick" type="button" data-code="chicken" data-label="닭고기"><img src="./assets/allergy/닭고기.png" alt="닭고기"><span>닭고기</span></button>
+        </div>
+      </div>
+
+      <footer class="modal-actions fill">
+        <button value="cancel" class="btn btn-ghost" type="button" id="manageCancel">취소</button>
+        <button id="manageDone" value="ok" class="btn btn-primary" type="button">확인</button>
+      </footer>
+    </section>
+  </form>
+</dialog>
+
+<!-- (3) 심각도 모달 -->
+<dialog id="severityDlg" class="modal">
+  <form method="dialog" class="modal-card sev-card">
+    <h3>알레르기 반응이 심한 편인가요?</h3>
+    <p class="subtext">선택한 항목은 음식 검색 시<br><span style="font-weight: bold;">위험 · 주의</span>의 수준이 각기 표시돼요.</p>
+
+    <div class="radio-list">
+      <label class="option danger">
+        <input type="radio" name="sev" value="danger">
+        <div class="opt-body"><b>위험</b><span>알레르기 반응이 심해서 검색 결과에서 제외하고 싶어요</span></div>
+      </label>
+
+      <label class="option caution">
+        <input type="radio" name="sev" value="caution">
+        <div class="opt-body"><b>주의</b><span>반응이 심하지 않고, 검색 결과에 주의 표시만 원해요</span></div>
+      </label>
+    </div>
+
+    <div class="modal-actions fill">
+      <button value="cancel" class="btn btn-ghost" type="button" id="sevCancel">취소</button>
+      <button id="sevOk" value="ok" class="btn btn-primary" type="button">확인</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- 7) 삭제 확인 -->
+<dialog id="confirmDlg" class="modal" style="border-radius:10px;">
+  <form method="dialog" class="modal-card center" style="max-width:420px;">
+    <p style="width:250px;font-size:small;text-align:center; padding-top: 20px; padding-bottom: 20px;">정말 삭제하시겠어요?</p>
+    <div class="modal-actions fill">
+      <button value="cancel" class="btn btn-ghost" type="button" id="confirmCancel">아니요</button>
+      <button id="confirmYes" value="ok" class="btn btn-primary" type="button">네</button>
+    </div>
+  </form>
+</dialog>
+
 
 
 
@@ -439,93 +452,169 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-
 <script src="./allergy-store.js"></script>
-
 <script>
 (function(){
-  const entry = document.getElementById('allergyEntry');
-  const pillText = entry?.querySelector('.pill-text');
-  const manageDlg = document.getElementById('manageDlg');
-  const confirmDlg = document.getElementById('confirmDlg');
-  const pickedWrap = document.getElementById('pickedWrap');
-  let toDelete = null;
+  const entry         = document.getElementById('allergyEntry');
+  const pillText      = entry?.querySelector('.pill-text');
 
+  const manageDlg     = document.getElementById('manageDlg');
+  const pickedWrap    = document.getElementById('pickedWrap');
+  const btnDeleteTg   = document.getElementById('btnDeleteToggle');
+  const btnDone       = document.getElementById('manageDone');
+  const btnCancel     = document.getElementById('manageCancel');
+  const btnCloseX     = manageDlg.querySelector('.icon-btn[aria-label="닫기"]');
+
+  const severityDlg   = document.getElementById('severityDlg');
+  const sevOk         = document.getElementById('sevOk');
+  const sevCancel     = document.getElementById('sevCancel');
+
+  const confirmDlg    = document.getElementById('confirmDlg');
+  const confirmYes    = document.getElementById('confirmYes');
+  const confirmCancel = document.getElementById('confirmCancel');
+
+  // 드래프트 상태(확인 눌러야 저장)
+  let draft = new Map();     // code -> {code,label,severity}
+  let deleteMode = false;    // 삭제 오버레이 토글
+  let pendingPick = null;    // { code, label }
+
+  /* ---------- 배지 문구 ---------- */
   function refreshPill(){
     const s = AllergyStore.load();
     if (s.items.length){
-      pillText.textContent = `${s.items.map(x=>x.label).slice(0,2).join(', ')} 등의 성분이 검색에서 제외/주의돼요`;
-      entry.classList.add('has-data');
+      pillText && (pillText.textContent = `${s.items.map(x=>x.label).slice(0,2).join(', ')} 등의 성분이 검색에서 제외/주의돼요`);
+      entry?.classList.add('has-data');
     }else{
-      pillText.textContent = '안전한 식품 검색을 위해 알레르기 정보를 알려주세요';
-      entry.classList.remove('has-data');
+      pillText && (pillText.textContent = '안전한 식품 검색을 위해 알레르기 정보를 알려주세요');
+      entry?.classList.remove('has-data');
     }
   }
 
-  function renderPicked(){
+  /* ---------- 모달 열기 ---------- */
+  function openManage(){
     const s = AllergyStore.load();
+    draft = new Map((s.items||[]).map(it => [it.code, {...it}]));
+    deleteMode = false;
+    renderPicked();
+    markPickedTiles();
+    manageDlg.showModal();
+  }
+
+  /* ---------- 상단 카드 렌더 ---------- */
+  function renderPicked(){
     pickedWrap.innerHTML = '';
-    if (!s.items.length){
+    if (draft.size === 0){
       pickedWrap.innerHTML = '<p class="mute">선택한 알레르기가 없어요.</p>';
       return;
     }
-    s.items.forEach(item=>{
-      const chip = document.createElement('div');
-      chip.className = 'picked';
-      chip.innerHTML = `
-        <span class="dot ${item.severity}"></span>
-        <span class="label">${item.label}</span>
-        <button class="del" aria-label="삭제" data-code="${item.code}">삭제</button>
+
+    for (const item of draft.values()){
+      const card = document.createElement('div');
+      card.style.cssText = 'width:112px;padding:10px 10px 8px;border:1px solid #e9ece6;border-radius:12px;position:relative;background:#fff;cursor:pointer;';
+      card.innerHTML = `
+        <span style="position:absolute;right:8px;top:8px;width:10px;height:10px;border-radius:50%;box-shadow:0 0 0 2px #fff;background:${item.severity==='danger' ? '#ef4444' : '#f59e0b'}"></span>
+        <div style="width:100%;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:#f8faf7;display:grid;place-items:center;">
+          <img src="${encodeURI(`./assets/allergy/${item.label}.png`)}" alt="${item.label}" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div style="text-align:center;font-size:13px;margin-top:6px;">${item.label}</div>
+        ${deleteMode ? `<button data-code="${item.code}" class="trash" style="position:absolute;inset:10px 10px 28px 10px;border-radius:10px;background:rgba(0,0,0,.45);display:grid;place-items:center;border:0;cursor:pointer;"><span style="font-size:28px;color:#fff;">🗑</span></button>` : ''}
       `;
-      pickedWrap.appendChild(chip);
+
+      // 카드 클릭 → 심각도 수정 (삭제모드 아닐 때)
+      card.addEventListener('click', (ev)=>{
+        if (deleteMode && ev.target.closest('.trash')) return;
+        if (deleteMode) return;
+        const cur = draft.get(item.code);
+        editSeverity(item.code, item.label, cur?.severity || 'danger');
+      });
+
+      // 삭제버튼 → 확인 모달
+      card.querySelector('.trash')?.addEventListener('click', (ev)=>{
+        ev.stopPropagation();
+        const code = ev.currentTarget.dataset.code;
+        closeForStack(manageDlg, ()=>{
+          confirmDlg.showModal();
+          const onOk = (e)=>{ e.preventDefault(); confirmDlg.close('ok'); };
+          confirmYes.addEventListener('click', onOk, {once:true});
+          confirmCancel.addEventListener('click', ()=>confirmDlg.close('cancel'), {once:true});
+          confirmDlg.addEventListener('close', ()=>{
+            if (confirmDlg.returnValue === 'ok'){ draft.delete(code); }
+            openBack(manageDlg); renderPicked(); markPickedTiles();
+          }, {once:true});
+        });
+      });
+
+      pickedWrap.appendChild(card);
+    }
+  }
+
+  /* ---------- 추가 섹션 타일 ---------- */
+  manageDlg.addEventListener('click', (e)=>{
+    const tile = e.target.closest('.pick');
+    if (!tile) return;
+    const code = tile.dataset.code;
+    const label = tile.dataset.label;
+    const cur = draft.get(code);
+    editSeverity(code, label, cur?.severity || 'danger');
+  });
+
+  /* ---------- 심각도 편집 ---------- */
+  function editSeverity(code, label, current='danger'){
+    pendingPick = { code, label };
+    closeForStack(manageDlg, ()=>{
+      (severityDlg.querySelector(`input[name="sev"][value="${current}"]`)
+        || severityDlg.querySelector('input[name="sev"][value="danger"]')
+      ).checked = true;
+      severityDlg.showModal();
+    });
+  }
+  sevOk.addEventListener('click', (e)=>{
+    e.preventDefault();
+    if (!pendingPick) return;
+    const sev = severityDlg.querySelector('input[name="sev"]:checked')?.value || 'danger';
+    draft.set(pendingPick.code, { ...pendingPick, severity: sev });
+    pendingPick = null;
+    severityDlg.close('ok');
+    openBack(manageDlg); renderPicked(); markPickedTiles();
+  });
+  sevCancel.addEventListener('click', (e)=>{ e.preventDefault(); severityDlg.close('cancel'); openBack(manageDlg); });
+
+  /* ---------- 삭제 토글 ---------- */
+  btnDeleteTg?.addEventListener('click', ()=>{ deleteMode = !deleteMode; renderPicked(); });
+
+  /* ---------- 저장/닫기 ---------- */
+  btnDone.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const items = [...draft.values()];
+    AllergyStore.save({ items, updatedAt: Date.now() });
+    manageDlg.close('ok');
+    refreshPill();
+  });
+  btnCancel?.addEventListener('click', (e)=>{ e.preventDefault(); manageDlg.close('cancel'); });
+  btnCloseX?.addEventListener('click', (e)=>{ e.preventDefault(); manageDlg.close('cancel'); });
+
+  /* ---------- 선택된 타일 표시 ---------- */
+  function markPickedTiles(){
+    const selected = new Set([...draft.keys()]);
+    manageDlg.querySelectorAll('.pick').forEach(b=>{
+      b.classList.toggle('is-picked', selected.has(b.dataset.code));
     });
   }
 
-  // 배지 클릭: 데이터 있으면 팝업, 없으면 설정 페이지로 이동
+  /* ---------- 모달 스택 헬퍼 ---------- */
+  function closeForStack(dialog, fn){ dialog.close('stack'); fn && fn(); }
+  function openBack(dialog){ dialog.showModal(); }
+
+  /* ---------- 배지 클릭으로 열기 ---------- */
   entry?.addEventListener('click', ()=>{
-    if (AllergyStore.hasData()){
-      renderPicked();
-      manageDlg.showModal();
-    } else {
-      location.href = './allergy.html';
-    }
-  });
-
-  // 팝업 내: 새 항목 추가(기본 ‘위험’으로 열고 선택)
-  manageDlg?.addEventListener('click', (e)=>{
-    const btn = e.target.closest('.pick');
-    if (!btn) return;
-    // 간단: 즉시 위험으로 저장(필요하면 severity 선택 다이얼로그 재사용 가능)
-    AllergyStore.upsert({ code: btn.dataset.code, label: btn.dataset.label, severity:'danger' });
-    renderPicked(); refreshPill();
-  });
-
-  // 삭제 요청 → 확인 다이얼로그
-  pickedWrap?.addEventListener('click', (e)=>{
-    const del = e.target.closest('button.del');
-    if (!del) return;
-    toDelete = del.dataset.code;
-    confirmDlg.showModal();
-  });
-  document.getElementById('confirmYes')?.addEventListener('click', ()=>{
-    if (toDelete){ AllergyStore.remove(toDelete); toDelete = null; }
-    confirmDlg.close('ok');
-    renderPicked(); refreshPill();
-  });
-
-  // Export / Import
-  document.getElementById('btnExport')?.addEventListener('click', ()=> AllergyStore.exportFile());
-  document.getElementById('fileImport')?.addEventListener('change', async (e)=>{
-    const file = e.target.files?.[0]; if (!file) return;
-    await AllergyStore.importFile(file);
-    renderPicked(); refreshPill();
-    e.target.value = '';
+    openManage(); // 저장 없을 때도 동일 모달로 진입 (원하면 여기서 페이지 이동으로 바꿔도 됨)
   });
 
   document.addEventListener('DOMContentLoaded', refreshPill);
   refreshPill();
 })();
 </script>
+
 
 
 

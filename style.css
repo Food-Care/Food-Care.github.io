@@ -339,27 +339,40 @@ body.mode-landing .wrap { display: none; }
 .modal[open] { border:0; outline:none; }
 .modal::backdrop { background: rgba(0,0,0,.45); }
 
-/* 상단 선택 카드 영역 */
-.picked-wrap{
-  display:flex; flex-wrap:wrap; gap:12px;
-  margin-bottom:18px;
-}
-.pick-card{
-  position:relative;
-  width:88px; padding:8px; border-radius:12px; background:#fff;
-  box-shadow:0 1px 0 rgba(0,0,0,.04), 0 8px 30px rgba(0,0,0,.06);
-  display:flex; flex-direction:column; align-items:center; gap:6px;
-}
-.pick-card img{ width:60px; height:60px; object-fit:cover; border-radius:10px; }
-.pick-card .name{ font-size:12px; color:#2c302c; }
+/* 선택된 카드 그리드 */
+.picked-wrap{ display:flex; gap:14px; flex-wrap:wrap; }
 
-/* severity 점 */
-.pick-card .sev-dot{
-  position:absolute; top:6px; right:6px; width:10px; height:10px; border-radius:50%;
+/* 각 카드 컨테이너 */
+.picked-card{
+  position:relative; width:104px; border-radius:14px; background:#fff;
+  box-shadow:0 2px 14px rgba(0,0,0,.08); padding:8px 8px 10px;
+}
+
+/* 미리보기 이미지 박스 (비율 고정이면 유지) */
+.picked-card .thumb{ width:88px; height:88px; border-radius:12px; overflow:hidden; }
+.picked-card .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+/* 우상단 점(위험/주의) */
+.picked-card .sev-dot{
+  position:absolute; right:8px; top:6px; width:10px; height:10px; border-radius:50%;
   box-shadow:0 0 0 2px #fff;
 }
-.pick-card .sev-dot.danger{ background:#ef4444; }
-.pick-card .sev-dot.caution{ background:#f59e0b; }
+.sev-dot.danger{ background:#ef4444; }
+.sev-dot.caution{ background:#f59e0b; }
+
+/* 🗑 오버레이 — 삭제 모드에서만 표시 */
+.picked-wrap.delete-mode .picked-card .trash-overlay{
+  display:flex;
+}
+.trash-overlay{
+  display:none; position:absolute; inset:8px 8px 30px 8px; /* 이미지 영역만 덮기 */
+  border-radius:12px; background:rgba(0,0,0,.42); color:#fff;
+  align-items:center; justify-content:center; cursor:pointer;
+  backdrop-filter:saturate(80%) blur(1px);
+}
+.trash-overlay .icon{ font-size:22px; line-height:1; }
+.picked-card .label{ text-align:center; margin-top:6px; font-size:12px; color:#333; }
+
 
 /* 상단 카드의 삭제 버튼 */
 .pick-card .chip-del{
@@ -385,6 +398,10 @@ body.mode-landing .wrap { display: none; }
   cursor:pointer;
 }
 
+.modal.wide {
+  max-height: 90vh;        /* 화면 넘침 방지 */
+  border-radius: 10px;     /* 둥근 모서리 유지 */
+}
 
 
 
@@ -762,6 +779,9 @@ body {
   width:100%;
 }
 
+
+
+
 /* 캡슐 검색바: 사진처럼 그라데이션 테두리 */
 .search{
   display:flex;
@@ -876,7 +896,21 @@ body {
 }
 
 
+.search-btn {
+  border: none;         /* 테두리 제거 */
+  background: none;     /* 배경색 제거 */
+  padding: 0;           /* 여백 제거 */
+  cursor: pointer;      /* 클릭 가능 표시 */
+}
 
+.search-btn:focus {
+  outline: none;        /* 클릭 시 파란 테두리 제거 */
+}
+
+.search-icon {
+  width: 20px;          /* 아이콘 크기 조정 (원하면 수정) */
+  height: 20px;
+}
 
 
 
@@ -1341,7 +1375,7 @@ h1{
 }
 
 footer{
-  padding-top: 300px;
+  padding-top: 100px;
   font-size:12px;
   color:#aaa;
 }
