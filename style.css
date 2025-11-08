@@ -487,30 +487,94 @@ body:not(.mode-landing) main.results {
 /* ===== 레이아웃 보조 ===== */
 .results{max-width:1080px;margin:24px auto;padding:0 16px}
 .toolbar{display:flex;justify-content:space-between;align-items:center;margin:8px 0 16px}
-.product-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-.product-card.col-span-6{grid-column:span 6}
-@media (max-width:720px){.product-card.col-span-6{grid-column:span 12}}
 
 
 
-/* ── 플레이스홀더 그리드(요구 4) ───────────────────── */
-.product-card.placeholder .thumb-img.skel{
-  width: 96px; height: 96px; border-radius: 12px;
-  background: linear-gradient(90deg,#ececec,#f6f6f6,#ececec);
-  background-size: 200% 100%; animation: shimmer 1.6s infinite linear;
+
+/* ===== 3열 그리드(그대로) ===== */
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
 }
-.product-card.placeholder .skel-line{
-  width: 180px; height: 16px; border-radius: 6px;
-  background: linear-gradient(90deg,#ececec,#f6f6f6,#ececec);
-  background-size: 200% 100%; animation: shimmer 1.6s infinite linear;
+@media (max-width:1024px){ .product-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:640px){ .product-grid{ grid-template-columns:1fr; } }
+
+/* ===== 카드 높이: 기본 223px 고정, 펼치면 auto ===== */
+.product-card{
+  border:1px solid #e9ece6;
+  border-radius:12px;
+  background:#fff;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  height:223px;                 /* ✅ 고정 */
 }
-.product-card.placeholder .skel-line.small{ width: 100px; height: 12px; margin-top:6px; }
-.product-card.placeholder .skel-chip{
-  display:inline-block; width: 64px; height: 28px; border-radius:999px;
-  background: linear-gradient(90deg,#ececec,#f6f6f6,#ececec);
-  background-size: 200% 100%; animation: shimmer 1.6s infinite linear;
+.product-card.card-expanded{
+  height:auto;                  /* ✅ 펼침 */
 }
-@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* 상단 섬네일은 적당히 고정 (원하면 숫자 조정) */
+.thumb-wrap{ height:120px; background:#f6f7f5; }
+.thumb-img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+/* 본문 */
+.meta{ padding:12px; display:flex; flex-direction:column; gap:8px; }
+.meta-top{ display:flex; justify-content:space-between; gap:8px; }
+.title{ font-weight:700; line-height:1.2; }
+.brand{ color:#6b7280; font-size:13px; }
+.chip{ background:#f1f3f0; border:1px solid #e5e7e2; padding:4px 8px; border-radius:6px; font-size:12px; }
+
+/* ===== 원재료: 접힘/펼침 ===== */
+.ings-wrap{ position:relative; }
+.ings{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  max-height:88px;              /* ✅ 접힘 높이 (223px에서 잘리는 정도) */
+  overflow:hidden;
+}
+.ings-wrap.collapsed::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:36px; /* 버튼 위까지 */
+  height:36px;
+  pointer-events:none;
+  background:linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+}
+.ings-wrap.expanded .ings{
+  max-height:none;
+  overflow:visible;
+}
+.ings-wrap.expanded::after{ display:none; }
+
+/* 더보기 버튼 */
+.btn-more-ings{
+  width:100%;
+  margin-top:8px;
+  background:#f7f7f7;
+  border:1px solid #e5e7e2;
+  border-radius:8px;
+  padding:6px 10px;
+  font-size:13px;
+  cursor:pointer;
+}
+.btn-more-ings:hover{ background:#f1f3ef; }
+
+
+/* 배지/경고칩(이미 있으면 생략) */
+.badge-row{ display:flex; align-items:center; gap:8px; margin:6px 0 4px; }
+.badge-icon{ width:18px; height:18px; }
+.badge-text{ color:#d92c2c; font-size:14px; }
+.badge-text.safe{ color:#137333; }
+.chip-warn{ background:#ffeb99; color:#111; border-color:#ffeb99; }
+
+
+
+
+
+
+
 
 /* 푸터 크레딧 */
 .landing-footer{
@@ -912,6 +976,38 @@ body {
   height: 20px;
 }
 
+/* ======================================================== */
+/* 알레르기 경고 칩 및 배지 스타일 */
+/* ======================================================== */
+
+.badge-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 4px;
+}
+
+.badge-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.badge-text {
+  font-size: 14px;
+  color: #d92c2c; /* 빨간 글씨 */
+  font-weight: 500;
+}
+
+.badge-text.safe {
+  color: #0a7d2a; /* 초록 글씨 */
+}
+
+/* ⚠️ 노란색 경고 칩 */
+.chip-warn {
+  background-color: #ffeb99;   /* 밝은 노랑 배경 */
+  color: #111;                 /* 검정 텍스트 */
+  border: 1px solid #ffeb99;
+}
 
 
 
