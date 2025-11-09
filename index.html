@@ -616,6 +616,68 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 
+<script>
+/* ============================================
+   URL(q, scope)로 진입하면 자동 검색 실행
+   예) index.html?q=마라탕&scope=all
+   ============================================ */
+(function () {
+  const params = new URLSearchParams(location.search);
+  const q     = params.get('q');
+  const scope = (params.get('scope') || 'all').toLowerCase();
+
+  if (!q) return;
+
+  // 1) 검색어 채우기
+  const $input = document.getElementById('q');
+  if ($input) $input.value = q;
+
+  // 2) 랜딩 해제 + 카테고리 활성화
+  const setupScope = () => {
+    // 랜딩 모드 해제(검색 결과 모드로)
+    if (typeof exitLanding === 'function') exitLanding();
+
+    // scope 처리 (기본: all)
+    if (scope === 'all' || !scope) {
+      window.categorySelected = false;     // ALL 상태
+      window.currentCat = 'all';
+      const quick = document.querySelector('.quick-cats');
+      if (quick) {
+        if (typeof ensureAllTile === 'function') ensureAllTile(quick);
+        if (typeof attachQuickCatsNav === 'function') attachQuickCatsNav(quick);
+      }
+      if (typeof activateTile === 'function') activateTile('all');
+    } else {
+      // 특정 카테고리 키를 scope로 넘기는 구조라면 여기서 유지
+      window.categorySelected = true;
+      window.currentCat = scope;
+      if (typeof activateTile === 'function') activateTile(scope);
+    }
+  };
+
+  // 3) app.js의 apply 준비될 때까지 대기 후 검색 실행
+  const run = () => {
+    setupScope();
+    if (typeof window.apply === 'function') window.apply();
+    // 바로 결과로 스크롤
+    document.getElementById('list')?.scrollIntoView({ behavior: 'instant', block: 'start' });
+  };
+
+  if (typeof window.apply === 'function') {
+    run();
+  } else {
+    // 최대 3초까지 폴링하여 apply 준비되면 실행
+    const started = Date.now();
+    const timer = setInterval(() => {
+      if (typeof window.apply === 'function' || Date.now() - started > 3000) {
+        clearInterval(timer);
+        run();
+      }
+    }, 50);
+  }
+})();
+</script>
+
 
 
 

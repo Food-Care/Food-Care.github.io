@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Allego | 상품 상세</title>
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    /* ====== 이 파일 전용 최소 스타일 (기존 style.css는 그대로) ====== */
+
+    .al-container{max-width:1100px;margin:12px auto 40px;padding:0 8px}
+    .al-product{display:grid;grid-template-columns:360px 1fr;gap:32px;margin-top:12px}
+    .al-product__media img{width:100%;border-radius:8px;object-fit:cover}
+    .p-brand{color:#6b7280;font-size:14px;margin-top:4px}
+    .p-title{font-size:20px;line-height:1.35;margin:8px 0 12px}
+    .p-badge-line{display:flex;align-items:center;gap:6px;color:#6b7280;font-size:13px;margin:6px 0}
+    .p-badge-line .pin{width:14px;height:14px}
+    .chips{display:flex;flex-wrap:wrap;gap:6px}
+    .btn-buy{margin-left:auto;background:#22c55e;color:#fff;border:0;border-radius:8px;padding:12px 18px;font-weight:700;cursor:pointer}
+    .meta-top{display:flex;align-items:center;gap:12px;margin-top:8px}
+
+    .tabs{display:flex;gap:24px;margin:26px 0 12px;border-bottom:1px solid #e5e7eb}
+    .tab-btn{background:transparent;border:0;color:#6b7280;padding:12px 2px;cursor:pointer}
+    .tab-btn.is-active{color:#22c55e;border-bottom:2px solid #22c55e}
+
+    .panel{display:none}
+    .panel.is-active{display:block}
+
+    .sec-title{font-weight:700;margin:10px 0 14px}
+    .danger-row{display:flex;align-items:center;gap:8px;color:#ef4444;font-weight:600}
+    .divider{height:1px;background:#e5e7eb;margin:16px 0}
+    footer.landing-footer{margin-top:40px}
+    @media(max-width:900px){
+      .al-product{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <!-- 상단바 -->
+  <header class="pro-topbar">
+    <a href="../index.html" class="pro-brand">
+      <img src="../assets/logo/Allego.png" alt="Allego 로고" class="pro-brand-img"/>
+    </a>
+
+    <form class="pro-searchbar" action="../index.html" method="get">
+      <input id="q" name="q" type="text" placeholder="알레르기 걱정없이 검색해보세요!" aria-label="검색어"/>
+      <input type="hidden" name="scope" value="all"/>
+      <button class="search-btn" type="submit" aria-label="검색">
+        <img class="search-icon" src="../assets/search.png" alt="검색"/>
+      </button>
+    </form>
+
+    <nav class="pro-topnav">
+      <a href="../pages/landing.html" class="link">회사소개</a>
+    </nav>
+  </header>
+
+  <!-- 본문 -->
+  <main class="al-container">
+    <section class="al-product">
+      <!-- 좌: 이미지 -->
+      <div class="al-product__media">
+        <img id="p-image" alt="상품 이미지"/>
+      </div>
+
+      <!-- 우: 메타 -->
+      <div>
+        <div class="p-brand" id="p-brand"></div>
+        <h1 class="p-title" id="p-title"></h1>
+
+        <div class="p-badge-line" id="p-badge" style="display:none">
+          <img class="pin" src="../assets/search/caution.png" alt="주의"/>
+          <span>주의해야 할 성분이 있어요</span>
+        </div>
+
+        <div class="chips" id="p-chips"></div>
+
+        <div class="meta-top">
+          <button id="btn-buy" class="btn-buy" type="button">최저가 구매하러 가기</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 탭 -->
+    <div class="tabs" role="tablist">
+      <button class="tab-btn is-active" data-tab="analysis" role="tab" aria-selected="true">성분 분석</button>
+      <button class="tab-btn" data-tab="info" role="tab">상품 정보</button>
+      <button class="tab-btn" data-tab="review" role="tab">후기</button>
+    </div>
+
+    <!-- 패널: 성분 분석 -->
+    <section id="panel-analysis" class="panel is-active">
+      <h2 class="sec-title">모든 성분을 확인하세요</h2>
+
+      <article class="box">
+        <div id="danger-wrap" style="display:none">
+          <div class="danger-row">
+            <img class="pin" src="../assets/search/caution.png" alt="주의"/>
+            <span>주의해야 할 성분이 있어요</span>
+          </div>
+          <div class="chips" id="danger-chips" style="margin-top:10px;"></div>
+          <div class="divider"></div>
+        </div>
+
+        <div class="sec-title" style="margin-top:0">모든 성분이에요</div>
+        <div class="chips" id="all-ings"></div>
+      </article>
+    </section>
+
+    <!-- 패널: 상품 정보 (비우기 요청) -->
+    <section id="panel-info" class="panel">
+      <div class="box" style="text-align:center">
+        준비 중입니다.
+      </div>
+    </section>
+
+    <!-- 패널: 후기 (비우기 요청) -->
+    <section id="panel-review" class="panel">
+      <article class="box" style="text-align:center">
+        준비 중입니다.
+      </article>
+    </section>
+  </main>
+
+  <footer class="landing-footer">
+    <small>© 2025 Allego. All rights reserved.</small>
+    <p class="credit">
+      Image by <a href="https://www.freepik.com/author/pch-vector" target="_blank" rel="noopener">pch.vector</a>
+      on <a href="https://www.freepik.com" target="_blank" rel="noopener">Freepik</a>
+    </p>
+  </footer>
+
+  <script src="../product.js" defer></script>
+</body>
+</html>
